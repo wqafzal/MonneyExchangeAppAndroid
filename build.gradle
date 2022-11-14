@@ -8,3 +8,12 @@ plugins {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+ext.getVersionCode = { ->
+    try {
+        return 'git rev-list --count HEAD'.execute().text.trim().toInteger()
+    }
+    catch (ignored) {
+        return -1
+    }
+}

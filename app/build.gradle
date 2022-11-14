@@ -15,6 +15,51 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    flavorDimensions "backend"
+    productFlavors {
+
+        Production {
+
+            dimension "backend"
+            def domainName = "data.fixer.io/api/"
+
+            buildConfigField "boolean", "enabledLogging", "false"
+            buildConfigField "boolean", "useCachedData", "false"
+            buildConfigField "String", "BASE_URL", "\"https://${domainName}/\""
+            buildConfigField "String", "apiKey", "\"\""
+            versionCode = project.getVersionCode()
+            versionName = getFormattedDate()
+        }
+
+        Staging {
+            dimension "backend"
+            def domainName = "data.fixer.io/api/"
+
+            applicationIdSuffix ".staging"
+
+            buildConfigField "boolean", "enabledLogging", "true"
+            buildConfigField "boolean", "useCachedData", "false"
+            buildConfigField "String", "BASE_URL", "\"https://${domainName}/\""
+            buildConfigField "String", "apiKey", "\"75cebf28-3ac4-4ad0-ac04-80b76c16b888\""
+            versionCode = project.getVersionCode()
+            versionName = getFormattedDate()
+        }
+
+        Development {
+            dimension "backend"
+            def domainName = "data.fixer.io/api/"
+
+            applicationIdSuffix ".dev"
+
+            buildConfigField "boolean", "enabledLogging", "true"
+            buildConfigField "boolean", "useCachedData", "false"
+            buildConfigField "String", "BASE_URL", "\"https://${domainName}/\""
+            buildConfigField "String", "appCenterAppSecret", "\"75cebf28-3ac4-4ad0-ac04-80b76c16b888\""
+            versionCode = project.getVersionCode()
+            versionName = getFormattedDate()
+        }
+
+    }
 
     buildTypes {
         release {
@@ -40,4 +85,11 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
+
+
+static def getFormattedDate() {
+    def date = new Date()
+    def formatted = date.format('yy.MM.dd')
+    return formatted
 }
