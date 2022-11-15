@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Money Exchange App</string>
+    <string name="converter_screen_title">Currency exchange converter</string>
+    <string name="converter_history_screen_title">History</string>
 </resources>
