@@ -28,7 +28,7 @@ android {
             buildConfigField "boolean", "enabledLogging", "false"
             buildConfigField "boolean", "useCachedData", "false"
             buildConfigField "String", "BASE_URL", "\"https://${domainName}/\""
-            buildConfigField "String", "apiKey", "\"\""
+            buildConfigField "String", "apiKey", "\"TxqVR0ya5bCkvTh1jdC7rzXjcpk512wE\""
             versionCode = project.getVersionCode()
             versionName = getFormattedDate()
         }
@@ -42,7 +42,7 @@ android {
             buildConfigField "boolean", "enabledLogging", "true"
             buildConfigField "boolean", "useCachedData", "false"
             buildConfigField "String", "BASE_URL", "\"https://${domainName}/\""
-            buildConfigField "String", "apiKey", "\"75cebf28-3ac4-4ad0-ac04-80b76c16b888\""
+            buildConfigField "String", "apiKey", "\"TxqVR0ya5bCkvTh1jdC7rzXjcpk512wE\""
             versionCode = project.getVersionCode()
             versionName = getFormattedDate()
         }
@@ -56,7 +56,7 @@ android {
             buildConfigField "boolean", "enabledLogging", "true"
             buildConfigField "boolean", "useCachedData", "false"
             buildConfigField "String", "BASE_URL", "\"https://${domainName}/\""
-            buildConfigField "String", "appCenterAppSecret", "\"75cebf28-3ac4-4ad0-ac04-80b76c16b888\""
+            buildConfigField "String", "apiKey", "\"TxqVR0ya5bCkvTh1jdC7rzXjcpk512wE\""
             versionCode = project.getVersionCode()
             versionName = getFormattedDate()
         }
