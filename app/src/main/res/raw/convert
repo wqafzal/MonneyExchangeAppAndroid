@@ -1,0 +1,14 @@
+{
+"success": true,
+"query": {
+"from": "USD",
+"to": "ZMW",
+"amount": 1
+},
+"info": {
+"timestamp": 1668579122,
+"rate": 16.595344
+},
+"date": "2022-11-16",
+"result": 16.595344
+}

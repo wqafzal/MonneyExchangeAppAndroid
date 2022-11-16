@@ -14,7 +14,7 @@ class CurrencyCaculateHistoryFragment : Fragment() {
         fun newInstance() = CurrencyCaculateHistoryFragment()
     }
 
-    private lateinit var viewModel: CurrencyCaculateHistoryViewModel
+    private lateinit var viewModel: CurrencyExchangeHistoryViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,7 +25,7 @@ class CurrencyCaculateHistoryFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CurrencyCaculateHistoryViewModel::class.java)
+        viewModel = ViewModelProvider(this)[CurrencyExchangeHistoryViewModel::class.java]
         // TODO: Use the ViewModel
     }
 

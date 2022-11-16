@@ -1,13 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.exchange.calculator.CurrencyCalculatorFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.example.moneyexchangeapp.ui.exchange.calculator.CurrencyCalculatorViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        tools:context=".ui.exchange.calculator.CurrencyCalculatorFragment">
 
-</FrameLayout>
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spSource"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/x_small"
+            android:onItemSelected="@{(parent,view,position, id)->viewModel.onConvertFromSelect(position)}"
+            app:layout_constraintEnd_toStartOf="@+id/btnSwapCurrencies"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lbFrom" />
+
+        <androidx.constraintlayout.widget.Constraints
+            android:id="@+id/spinnerGuideLine"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias=".5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/lbFrom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x_small"
+            android:text="@string/from"
+            app:layout_constraintEnd_toEndOf="@+id/spSource"
+            app:layout_constraintStart_toStartOf="@+id/spSource"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btnSwapCurrencies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{()->viewModel.swapCurrencies()}"
+            app:layout_constraintEnd_toEndOf="@id/spinnerGuideLine"
+            app:layout_constraintStart_toStartOf="@id/spinnerGuideLine"
+            app:layout_constraintTop_toTopOf="@+id/spSource"
+            app:srcCompat="@drawable/ic_baseline_swap_horiz_24" />
+
+        <TextView
+            android:id="@+id/lbTo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x_small"
+            android:text="@string/to"
+            app:layout_constraintEnd_toEndOf="@+id/spTarget"
+            app:layout_constraintStart_toStartOf="@+id/spTarget"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spTarget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x_small"
+            android:layout_marginEnd="@dimen/x_medium"
+            android:onItemSelected="@{(parent,view,position, id)->viewModel.onConvertToSelect(position)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/spinnerGuideLine"
+            app:layout_constraintTop_toBottomOf="@id/lbTo" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sourceAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/x_medium"
+            android:hint="@string/amount_hint"
+            app:layout_constraintEnd_toStartOf="@+id/calculatedAMount"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnSwapCurrencies">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberSigned|numberDecimal"
+                android:onTextChanged="@{(text,start,before,count)->viewModel.onTextChange(text)}"
+                android:text="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/calculatedAMount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/x_medium"
+            android:hint="@string/amount_calculated_hint"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/sourceAmount"
+            app:layout_constraintTop_toBottomOf="@+id/btnSwapCurrencies">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="none"
+                android:text="@={viewModel.finalAmount}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.isLoading()?View.VISIBLE:View.GONE}"
+            app:layout_constraintEnd_toStartOf="@+id/calculatedAMount"
+            app:layout_constraintStart_toEndOf="@+id/sourceAmount"
+            app:layout_constraintTop_toTopOf="@+id/sourceAmount" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/realTime"
+            app:layout_constraintEnd_toEndOf="@+id/calculatedAMount"
+            app:layout_constraintTop_toBottomOf="@+id/calculatedAMount" />
+
+        <Button
+            android:id="@+id/buttonDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_details_text"
+            android:onClick="@{()->viewModel.openDetails()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switch1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

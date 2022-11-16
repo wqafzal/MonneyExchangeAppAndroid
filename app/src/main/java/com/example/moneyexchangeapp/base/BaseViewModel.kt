@@ -1,19 +1,18 @@
 package com.example.moneyexchangeapp.base
 
-import android.util.Log
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moneyexchangeapp.AndroidApp
 import com.google.gson.stream.MalformedJsonException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-abstract class BaseViewModel(app:AndroidApp) : AndroidViewModel(app) {
+abstract class BaseViewModel() : ViewModel() {
     /**
      * This Method is called from View Model inca se HTTP code is greater than 299
      * another possible flow of invoking is if any exception occurs in try Running Code Block
@@ -22,6 +21,10 @@ abstract class BaseViewModel(app:AndroidApp) : AndroidViewModel(app) {
     fun onHandleError(error: Throwable): String {
         var message = error.message ?: "Unknown error"
         when (error) {
+            is HttpException -> {
+                if (error.code() == 429)
+                    message = "Your limit exceeds."
+            }
             is UnknownHostException -> {
                 message = "Failed to connect to server. Check you internet connection."
             }
@@ -35,7 +38,7 @@ abstract class BaseViewModel(app:AndroidApp) : AndroidViewModel(app) {
 //                message= "In Valid Session data."
 //            }
             is MalformedJsonException -> {
-                message= "Error parsing data."
+                message = "Error parsing data."
             }
         }
         return message

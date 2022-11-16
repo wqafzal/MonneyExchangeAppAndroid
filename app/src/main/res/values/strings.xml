@@ -2,4 +2,12 @@
     <string name="app_name">Money Exchange App</string>
     <string name="converter_screen_title">Currency exchange converter</string>
     <string name="converter_history_screen_title">History</string>
+    <string name="initializing">Initializing...</string>
+    <string name="amount_hint">Amount</string>
+    <string name="amount_calculated_hint">Total amount</string>
+    <string name="reloadSymbols">\nReload Currencies List?</string>
+    <string name="realTime">Real time</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="btn_details_text">Details</string>
 </resources>

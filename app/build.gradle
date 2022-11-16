@@ -56,7 +56,7 @@ android {
             applicationIdSuffix ".dev"
 
             buildConfigField "boolean", "enabledLogging", "true"
-            buildConfigField "boolean", "useCachedData", "false"
+            buildConfigField "boolean", "useCachedData", "true"
             buildConfigField "String", "BASE_URL", "\"https://${domainName}/\""
             buildConfigField "String", "apiKey", "\"TxqVR0ya5bCkvTh1jdC7rzXjcpk512wE\""
             versionCode = project.getVersionCode()
