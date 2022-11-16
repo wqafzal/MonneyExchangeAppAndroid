@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.moneyexchangeapp.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CurrencyCaculateHistoryFragment : Fragment() {
 
     companion object {
@@ -16,17 +18,16 @@ class CurrencyCaculateHistoryFragment : Fragment() {
 
     private lateinit var viewModel: CurrencyExchangeHistoryViewModel
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(this)[CurrencyExchangeHistoryViewModel::class.java]
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_currency_caculate_history, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this)[CurrencyExchangeHistoryViewModel::class.java]
-        // TODO: Use the ViewModel
     }
 
 }

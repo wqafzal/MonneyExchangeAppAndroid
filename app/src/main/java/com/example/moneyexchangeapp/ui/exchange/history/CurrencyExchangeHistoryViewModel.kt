@@ -6,7 +6,10 @@ import com.example.moneyexchangeapp.data.remote.fixerApi.FixerService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-//@HiltViewModel
-class CurrencyExchangeHistoryViewModel /*@Inject*/ constructor(app: AndroidApp, fixerService: FixerService) : BaseViewModel() {
+@HiltViewModel
+class CurrencyExchangeHistoryViewModel @Inject constructor(val fixerService: FixerService) : BaseViewModel() {
+
+
+
 
 }
