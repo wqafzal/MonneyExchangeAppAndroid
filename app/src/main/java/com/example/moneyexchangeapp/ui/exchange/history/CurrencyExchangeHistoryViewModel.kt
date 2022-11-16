@@ -1,5 +1,6 @@
 package com.example.moneyexchangeapp.ui.exchange.history
 
+import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.moneyexchangeapp.BuildConfig
@@ -21,6 +22,9 @@ class CurrencyExchangeHistoryViewModel @Inject constructor(
     private val gson: Gson
 ) :
     BaseViewModel() {
+
+    var loadingHistoricalDataForSelectedOnes = ObservableField(false)
+    var loadingHistoricalDataForCommon = ObservableField(false)
 
     fun getHistoricalData(
         fromCurrency: String,

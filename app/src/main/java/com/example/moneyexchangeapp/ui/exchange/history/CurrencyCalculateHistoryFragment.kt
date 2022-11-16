@@ -28,8 +28,12 @@ class CurrencyCalculateHistoryFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[CurrencyExchangeHistoryViewModel::class.java]
-        fromCurrency = arguments?.getString(FROM_CURRENCY) ?: "EUR"
-        toCurrency = arguments?.getString(TO_CURRENCY) ?: "USD"
+        arguments?.getString(FROM_CURRENCY)?.let {
+            fromCurrency = it
+        }
+        arguments?.getString(TO_CURRENCY)?.let {
+            toCurrency = it
+        }
     }
 
     private lateinit var binding: FragmentCurrencyCaculateHistoryBinding
@@ -57,12 +61,14 @@ class CurrencyCalculateHistoryFragment : BaseFragment() {
         viewModel.getHistoricalData(fromCurrency, toCurrency).observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.LOADING -> {
-
+                    viewModel.loadingHistoricalDataForSelectedOnes.set(true)
                 }
                 Status.SUCCESS -> {
+                    viewModel.loadingHistoricalDataForSelectedOnes.set(false)
                     exchangeHistoryAdapter.setItems(it.data?.rates)
                 }
                 Status.ERROR -> {
+                    viewModel.loadingHistoricalDataForSelectedOnes.set(false)
                     it.message?.let { it1 -> showLongSnackbar(it1) }
                 }
 
@@ -71,12 +77,15 @@ class CurrencyCalculateHistoryFragment : BaseFragment() {
         viewModel.getHistoricalData(fromCurrency, famousCurrencies).observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.LOADING -> {
+                    viewModel.loadingHistoricalDataForCommon.set(true)
 
                 }
                 Status.SUCCESS -> {
+                    viewModel.loadingHistoricalDataForCommon.set(false)
                     exchangeHistoryAdapterForCommonCurrencies.setItems(it.data?.rates)
                 }
                 Status.ERROR -> {
+                    viewModel.loadingHistoricalDataForCommon.set(false)
                     it.message?.let { it1 -> showLongSnackbar(it1) }
                 }
 

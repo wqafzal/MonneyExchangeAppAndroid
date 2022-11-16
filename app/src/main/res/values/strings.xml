@@ -10,4 +10,6 @@
     <string name="from">From</string>
     <string name="to">To</string>
     <string name="btn_details_text">Details</string>
+    <string name="last_three_days_historical_title">Last 3 days Historical data.</string>
+    <string name="last_days_historical_title">Last 3 days Historical data for other  currencies.</string>
 </resources>
