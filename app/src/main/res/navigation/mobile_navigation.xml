@@ -20,6 +20,12 @@
         android:name="com.example.moneyexchangeapp.ui.exchange.history.CurrencyCaculateHistoryFragment"
         android:label="@string/converter_history_screen_title"
         tools:layout="@layout/fragment_currency_caculate_history">
+        <argument
+            android:name="fromCurrency"
+            app:argType="string" />
+        <argument
+            android:name="toCurrency"
+            app:argType="string" />
 
     </fragment>
 

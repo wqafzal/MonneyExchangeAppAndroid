@@ -83,10 +83,10 @@ class CurrencyCalculatorFragment : BaseFragment(), CurrencyCalculatorViewModel.E
     override fun openDetails() {
         view?.let {
             Navigation.findNavController(it)
-                .navigate(R.id.action_nav_currency_calculator_to_nav_history,Bundle().apply {
-                    putString("from",viewModel.convertFrom )
-                    putString("to",viewModel.convertTo )
-                } )
+                .navigate(R.id.action_nav_currency_calculator_to_nav_history, Bundle().apply {
+                    putString("from", viewModel.convertFrom)
+                    putString("to", viewModel.convertTo)
+                })
         }
     }
 
