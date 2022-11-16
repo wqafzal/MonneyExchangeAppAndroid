@@ -54,7 +54,9 @@ class CurrencyCalculatorFragment : BaseFragment(), CurrencyCalculatorViewModel.E
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data?.symbols?.let {
+                        viewModel.pauseConversion = true
                         sourceAdapter.setItems(it)
+                        viewModel.pauseConversion = false
                         targetAdapter.setItems(it)
                         binding.spSource.adapter = sourceAdapter
                         binding.spTarget.adapter = targetAdapter
@@ -81,12 +83,14 @@ class CurrencyCalculatorFragment : BaseFragment(), CurrencyCalculatorViewModel.E
     }
 
     override fun openDetails() {
-        view?.let {
-            Navigation.findNavController(it)
-                .navigate(R.id.action_nav_currency_calculator_to_nav_history, Bundle().apply {
-                    putString("from", viewModel.convertFrom)
-                    putString("to", viewModel.convertTo)
-                })
+        view?.let { view ->
+            CurrencyCalculatorFragmentDirections.actionNavCurrencyCalculatorToNavHistory(
+                viewModel.convertFrom,
+                viewModel.convertTo
+            ).let {
+                Navigation.findNavController(view)
+                    .navigate(it)
+            }
         }
     }
 
