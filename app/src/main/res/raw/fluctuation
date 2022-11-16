@@ -1,0 +1,15 @@
+{
+  "base": "EUR",
+  "end_date": "2022-11-16",
+  "fluctuation": true,
+  "rates": {
+    "USD": {
+      "change": 0.0059,
+      "change_pct": 0.5744,
+      "end_rate": 1.037818,
+      "start_rate": 1.031891
+    }
+  },
+  "start_date": "2022-11-14",
+  "success": true
+}
