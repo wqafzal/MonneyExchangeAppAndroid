@@ -16,6 +16,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,7 +33,8 @@ class CurrencyCalculatorViewModel @Inject constructor(
     private var _symbols = MutableLiveData<ApiResponseResource<FixerSymbolsResponseModel>>()
     var symbolsResponse: LiveData<ApiResponseResource<FixerSymbolsResponseModel>> = _symbols
 
-    private var _latestExchangeRates = MutableLiveData<ApiResponseResource<LatestExchangeRateResponseModel>>()
+    private var _latestExchangeRates =
+        MutableLiveData<ApiResponseResource<LatestExchangeRateResponseModel>>()
     var latestExchangeRates: LiveData<ApiResponseResource<LatestExchangeRateResponseModel>> =
         _latestExchangeRates
 
@@ -58,7 +60,11 @@ class CurrencyCalculatorViewModel @Inject constructor(
                 .onSuccess {
                     if (it.success)
                         _latestExchangeRates.postValue(ApiResponseResource.success(it))
-                    else _latestExchangeRates.postValue(ApiResponseResource.error(it.error.info))
+                    else _latestExchangeRates.postValue(it.error?.info?.let { it1 ->
+                        ApiResponseResource.error(
+                            it1
+                        )
+                    })
                 }
                 .onFailure {
                     _latestExchangeRates.postValue(ApiResponseResource.error(onHandleError(it)))
@@ -69,22 +75,29 @@ class CurrencyCalculatorViewModel @Inject constructor(
     fun fetchSymbols() {
         launchApi {
             kotlin.runCatching {
+                isLoading.set(true)
                 _symbols.postValue(ApiResponseResource.loading())
                 if (BuildConfig.useCachedData)
                     getCachedSymbols()
                 else fixerService.getSymbols()
             }.onSuccess {
+                isLoading.set(false)
                 if (it.success)
                     _symbols.postValue(ApiResponseResource.success(it))
                 else _symbols.postValue(ApiResponseResource.error("Un able to fetch symbols"))
             }.onFailure {
+                isLoading.set(false)
                 val message = onHandleError(it)
+                _symbols.postValue(ApiResponseResource.error(message))
             }
         }
     }
 
     private fun getCachedLatestRates(): LatestExchangeRateResponseModel {
-        return gson.fromJson(String.readRaw(R.raw.base_rates), LatestExchangeRateResponseModel::class.java)
+        return gson.fromJson(
+            String.readRaw(R.raw.base_rates),
+            LatestExchangeRateResponseModel::class.java
+        )
     }
 
     private fun getCachedSymbols(): FixerSymbolsResponseModel {
@@ -98,6 +111,7 @@ class CurrencyCalculatorViewModel @Inject constructor(
         _symbols.value?.data?.symbols?.get(position)?.let {
             convertTo = it.currencySymbol
         }
+        println("position $position")
         convertAmount()
     }
 
@@ -127,14 +141,17 @@ class CurrencyCalculatorViewModel @Inject constructor(
                 if (errorMessage.contains("Your limit exceeds.") && _latestExchangeRates.value?.data?.rates?.isNotEmpty() == true) {
                     updateConversionFromLatestRates()
                 } else
-                    if (errorMessage.toLowerCase().contains("coroutine").not())
+                    if (errorMessage.lowercase(Locale.ROOT).contains("coroutine").not())
                         events?.onError(errorMessage)
             }
         }
     }
 
     private fun updateConversionFromLatestRates() {
-
+        _latestExchangeRates.value?.data?.rates?.let {
+            val amountInEuros = amount.toDouble().div(it.first { it.symbol == convertFrom }.rate)
+            updateConversion(amountInEuros.times(it.first { it.symbol == convertTo }.rate))
+        }
     }
 
     private fun updateConversion(result: Double) {

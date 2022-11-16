@@ -56,7 +56,7 @@ class DataModule {
             client.addInterceptor(logging)
         }
 
-        client.callTimeout(30, TimeUnit.SECONDS)
+        client.callTimeout(30, TimeUnit.SECONDS).connectTimeout(30, TimeUnit.SECONDS)
 
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)

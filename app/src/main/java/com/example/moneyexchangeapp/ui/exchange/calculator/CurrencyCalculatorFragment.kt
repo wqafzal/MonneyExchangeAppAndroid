@@ -54,9 +54,7 @@ class CurrencyCalculatorFragment : BaseFragment(), CurrencyCalculatorViewModel.E
             when (it.status) {
                 Status.SUCCESS -> {
                     it.data?.symbols?.let {
-                        viewModel.pauseConversion = true
                         sourceAdapter.setItems(it)
-                        viewModel.pauseConversion = false
                         targetAdapter.setItems(it)
                         binding.spSource.adapter = sourceAdapter
                         binding.spTarget.adapter = targetAdapter

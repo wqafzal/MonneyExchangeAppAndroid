@@ -13,7 +13,7 @@ data class LatestExchangeRateResponseModel(
     val rates: List<ExchangeRate>,
     val success: Boolean,
     val timestamp: Int,
-    val error: Error
+    val error: Error?
 )
 
 data class ExchangeRate(
