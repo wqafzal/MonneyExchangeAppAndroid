@@ -25,7 +25,7 @@ android {
         Production {
 
             dimension "backend"
-            def domainName = "data.fixer.io/api/"
+            def domainName = "data.fixer.io/api"
 
             buildConfigField "boolean", "enabledLogging", "false"
             buildConfigField "boolean", "useCachedData", "false"
@@ -37,7 +37,7 @@ android {
 
         Staging {
             dimension "backend"
-            def domainName = "data.fixer.io/api/"
+            def domainName = "data.fixer.io/api"
 
             applicationIdSuffix ".staging"
 
@@ -51,7 +51,7 @@ android {
 
         Development {
             dimension "backend"
-            def domainName = "data.fixer.io/api/"
+            def domainName = "api.apilayer.com/fixer"
 
             applicationIdSuffix ".dev"
 
@@ -97,6 +97,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout-core:1.0.4'
     //Hilt
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-compiler:2.44"
