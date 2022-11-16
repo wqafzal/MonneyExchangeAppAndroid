@@ -21,7 +21,6 @@
             android:layout_height="match_parent"
             android:layout_margin="@dimen/x_small"
             android:layout_weight="1"
-            android:background="#DD9F9F"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/row_exchange_rate" />
 
