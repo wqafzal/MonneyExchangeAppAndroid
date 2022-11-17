@@ -16,5 +16,5 @@ interface CurrencyRateDao {
     fun insert(latestExchangeRateResponseModel: LatestExchangeRateResponseModel)
 
     @Query("DELETE FROM LatestExchangeRateResponseModel")
-    suspend fun clearRates()
+    suspend fun clearRecords()
 }

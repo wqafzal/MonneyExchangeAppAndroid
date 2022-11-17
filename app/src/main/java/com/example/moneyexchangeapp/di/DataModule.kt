@@ -102,6 +102,10 @@ class DataModule {
     @Singleton
     fun getConverterSingleDao(appDatabase: AppDatabase) = appDatabase.getCurrencyRateDao()
 
+    @Provides
+    @Singleton
+    fun getSymbolsDao(appDatabase: AppDatabase) = appDatabase.getSymbolsDao()
+
 
     @Singleton
     @Provides

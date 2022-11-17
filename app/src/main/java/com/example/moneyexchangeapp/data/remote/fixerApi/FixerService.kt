@@ -19,7 +19,7 @@ interface FixerService {
         @Query(value = "amount") amount: String
     ): ConvertDataResponse
 
-    @GET("convert")
+    @GET("latest")
     suspend fun getLatestRates(
         @Query(value = "base") convertFrom: String = "EUR",
     ): LatestExchangeRateResponseModel
