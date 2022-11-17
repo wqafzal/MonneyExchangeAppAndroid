@@ -5,12 +5,15 @@
     <string name="initializing">Initializing...</string>
     <string name="amount_hint">Amount</string>
     <string name="amount_calculated_hint">Total amount</string>
-    <string name="reloadSymbols">\nReload Currencies List?</string>
+    <string name="reloadSymbols">\nCurrencies failed to load. Reload Currencies List?</string>
     <string name="realTime">Real time</string>
     <string name="from">From</string>
     <string name="to">To</string>
+    <string name="some_error">Something went wrong</string>
     <string name="btn_details_text">Details</string>
     <string name="last_three_days_historical_title">Last 3 days Historical data.</string>
     <string name="last_days_historical_title">Last 3 days Historical data for other  currencies.</string>
     <string name="check_internet_message">Please check your connection</string>
+    <string name="loading_exchange_rates">Loading exchange rates...</string>
+    <string name="loadin_symbols">Loading Currencies list...</string>
 </resources>

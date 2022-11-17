@@ -4,20 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.moneyexchangeapp.R
 import com.example.moneyexchangeapp.adapters.CurrencySymbolsAdapter
 import com.example.moneyexchangeapp.base.BaseFragment
+import com.example.moneyexchangeapp.data.model.FixerSymbolsResponseModel
+import com.example.moneyexchangeapp.data.model.LatestExchangeRateResponseModel
 import com.example.moneyexchangeapp.databinding.FragmentCurrencyCalculatorBinding
+import com.example.moneyexchangeapp.network.DataResponseResource
 import com.example.moneyexchangeapp.network.Status
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CurrencyCalculatorFragment : BaseFragment(), CurrencyCalculatorViewModel.ExchangeEvents {
 
-    companion object {
-    }
 
     private lateinit var viewModel: CurrencyCalculatorViewModel
 
@@ -46,33 +48,74 @@ class CurrencyCalculatorFragment : BaseFragment(), CurrencyCalculatorViewModel.E
         super.onViewCreated(view, savedInstanceState)
         viewModel.events = this
         setSymbolsObserver()
+        setExchangeRatesObserver()
     }
 
     private fun setSymbolsObserver() {
-        viewModel.symbolsResponse.observe(viewLifecycleOwner) {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    it.data?.symbols?.let { list ->
-                        sourceAdapter.setItems(list)
-                        targetAdapter.setItems(list)
-                        binding.spSource.adapter = sourceAdapter
-                        binding.spTarget.adapter = targetAdapter
-                    }
+        viewModel.symbolsResponse.observe(viewLifecycleOwner, symbolsObserver)
+    }
+
+    private fun setExchangeRatesObserver() {
+        viewModel.latestExchangeRates.observe(viewLifecycleOwner, exchangeRatesObserver)
+    }
+
+    private var symbolsObserver = Observer<DataResponseResource<FixerSymbolsResponseModel>> {
+        when (it.status) {
+            Status.SUCCESS -> {
+                viewModel.hideLoading()
+                it.data?.symbols?.let { list ->
+                    sourceAdapter.setItems(list)
+                    targetAdapter.setItems(list)
+                    binding.spSource.adapter = sourceAdapter
+                    binding.spTarget.adapter = targetAdapter
+                    removeSymbolsObserver()
+                    viewModel.getLatestRates()
                 }
-                Status.LOADING -> {
-                    showLongSnackBar("Loading Currencies list...")
-                }
-                Status.ERROR -> {
-                    it.message?.let { it1 ->
-                        showLongSnackBar(it1.plus(getString(R.string.reloadSymbols))) {
-                            viewModel.fetchSymbols()
-                        }
+            }
+            Status.LOADING -> {
+                viewModel.setLoading()
+                showLongSnackBar(getString(R.string.loadin_symbols))
+            }
+            Status.ERROR -> {
+                viewModel.hideLoading()
+                it.message?.let { it1 ->
+                    showLongSnackBar(it1.plus(getString(R.string.reloadSymbols))) {
+                        viewModel.fetchSymbols()
                     }
                 }
             }
         }
     }
 
+    private var exchangeRatesObserver =
+        Observer<DataResponseResource<LatestExchangeRateResponseModel>> {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    viewModel.hideLoading()
+                    removeExchangeRatesError()
+                }
+                Status.LOADING -> {
+                    viewModel.setLoading()
+                    showLongSnackBar(getString(R.string.loading_exchange_rates))
+                }
+                Status.ERROR -> {
+                    viewModel.hideLoading()
+                    it.message?.let { it1 ->
+                        showLongSnackBar(getString(R.string.reloadSymbols)) {
+                            viewModel.fetchSymbols()
+                        }
+                    }
+                }
+            }
+        }
+
+    private fun removeExchangeRatesError() {
+        viewModel.latestExchangeRates.removeObserver(exchangeRatesObserver)
+    }
+
+    private fun removeSymbolsObserver() {
+        viewModel.symbolsResponse.removeObserver(symbolsObserver)
+    }
 
     override fun swap(fromCurrencyPosition: Int, toCurrencyPosition: Int) {
         binding.spSource.setSelection(fromCurrencyPosition)
@@ -89,11 +132,6 @@ class CurrencyCalculatorFragment : BaseFragment(), CurrencyCalculatorViewModel.E
                     .navigate(it)
             }
         }
-    }
-
-
-    override fun onError(message: String) {
-        showLongSnackBar(message)
     }
 
 }

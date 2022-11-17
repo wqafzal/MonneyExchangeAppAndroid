@@ -7,7 +7,7 @@ import com.example.moneyexchangeapp.network.Status.NO_MORE_ITEM
 import com.example.moneyexchangeapp.network.Status.SUCCESS
 
 
-class ApiResponseResource<T> private constructor(
+class DataResponseResource<T> private constructor(
     val status: Int,
     @param:Nullable @field:Nullable val message: String?
 ) {
@@ -22,20 +22,20 @@ class ApiResponseResource<T> private constructor(
 
     companion object {
 
-        fun <T> success(data: T): ApiResponseResource<T> {
-            return ApiResponseResource(SUCCESS, data, "success")
+        fun <T> success(data: T): DataResponseResource<T> {
+            return DataResponseResource(SUCCESS, data, "success")
         }
 
-        fun <T> error(msg: String): ApiResponseResource<T> {
-            return ApiResponseResource(ERROR, msg)
+        fun <T> error(msg: String): DataResponseResource<T> {
+            return DataResponseResource(ERROR, msg)
         }
 
-        fun <T> loading(): ApiResponseResource<T> {
-            return ApiResponseResource(LOADING, "loading")
+        fun <T> loading(): DataResponseResource<T> {
+            return DataResponseResource(LOADING, "loading")
         }
 
-        fun <T> noMoreItem(): ApiResponseResource<T> {
-            return ApiResponseResource(NO_MORE_ITEM, "no more items exist")
+        fun <T> noMoreItem(): DataResponseResource<T> {
+            return DataResponseResource(NO_MORE_ITEM, "no more items exist")
         }
     }
 

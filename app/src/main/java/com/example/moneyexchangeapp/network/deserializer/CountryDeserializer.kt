@@ -25,7 +25,7 @@ class CountryDeserializer : JsonDeserializer<FixerSymbolsResponseModel> {
             }
         }
         return FixerSymbolsResponseModel(
-            json?.asJsonObject?.get("success")?.asBoolean ?: false,
+            success = json?.asJsonObject?.get("success")?.asBoolean ?: false,
             symbols = listOfCountries
         )
     }

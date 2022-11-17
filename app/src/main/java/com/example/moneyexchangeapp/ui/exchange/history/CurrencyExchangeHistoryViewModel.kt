@@ -9,7 +9,8 @@ import com.example.moneyexchangeapp.base.BaseViewModel
 import com.example.moneyexchangeapp.data.HistoricalDataResponseModel
 import com.example.moneyexchangeapp.data.remote.fixerApi.FixerService
 import com.example.moneyexchangeapp.extensions.readRaw
-import com.example.moneyexchangeapp.network.ApiResponseResource
+import com.example.moneyexchangeapp.network.DataResponseResource
+import com.example.moneyexchangeapp.util.Constants
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.text.SimpleDateFormat
@@ -24,7 +25,6 @@ class CurrencyExchangeHistoryViewModel @Inject constructor(
     BaseViewModel() {
 
     companion object{
-        const val DATE_FORMAT = "YYYY-MM-dd"
     }
 
     var loadingHistoricalDataForSelectedOnes = ObservableField(false)
@@ -33,11 +33,11 @@ class CurrencyExchangeHistoryViewModel @Inject constructor(
     fun getHistoricalData(
         fromCurrency: String,
         toCurrency: String
-    ): LiveData<ApiResponseResource<HistoricalDataResponseModel>> {
+    ): LiveData<DataResponseResource<HistoricalDataResponseModel>> {
         val startDate = getDateFromXDaysAgo(2)
         val endDate = getDateFromXDaysAgo(0)
-        val response = MutableLiveData<ApiResponseResource<HistoricalDataResponseModel>>(
-            ApiResponseResource.loading()
+        val response = MutableLiveData<DataResponseResource<HistoricalDataResponseModel>>(
+            DataResponseResource.loading()
         )
         launchApi {
             kotlin.runCatching {
@@ -51,9 +51,9 @@ class CurrencyExchangeHistoryViewModel @Inject constructor(
                         toCurrency,
                     )
             }.onSuccess {
-                response.postValue(ApiResponseResource.success(it))
+                response.postValue(DataResponseResource.success(it))
             }.onFailure {
-                response.postValue(ApiResponseResource.error(onHandleError(it)))
+                response.postValue(DataResponseResource.error(onHandleError(it)))
             }
         }
         return response
@@ -69,7 +69,7 @@ class CurrencyExchangeHistoryViewModel @Inject constructor(
     private fun getDateFromXDaysAgo(daysAgo: Int): String {
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DATE, -daysAgo)
-        val simpleDateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
+        val simpleDateFormat = SimpleDateFormat(Constants.DateFormats.DATE_FORMAT, Locale.getDefault())
 
         return simpleDateFormat.format(calendar.time)
     }

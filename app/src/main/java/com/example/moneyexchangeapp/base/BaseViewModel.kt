@@ -1,5 +1,6 @@
 package com.example.moneyexchangeapp.base
 
+import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.stream.MalformedJsonException
@@ -48,5 +49,16 @@ abstract class BaseViewModel : ViewModel() {
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
         block: suspend CoroutineScope.() -> Unit
     ) = viewModelScope.launch(dispatcher, block = block)
+
+    var isLoading: ObservableField<Boolean> = ObservableField(false)
+
+
+    fun setLoading() {
+        isLoading.set(true)
+    }
+
+    fun hideLoading() {
+        isLoading.set(false)
+    }
 
 }

@@ -36,13 +36,13 @@ class ExchangeRateResponseModelDeserializer : JsonDeserializer<LatestExchangeRat
             date = json?.asJsonObject?.get("date")?.asString ?: "",
             rates = listOfCountries,
             success = json?.asJsonObject?.get("success")?.asBoolean ?: false,
-            timestamp = json?.asJsonObject?.get("timestamp")?.asInt ?: 0,
+            timestamp = json?.asJsonObject?.get("timestamp")?.asInt ?: 0
+        ).apply {
             error = if (json?.asJsonObject?.has("error") == true) Gson().fromJson(
                 json.asJsonObject?.get(
                     "error"
                 )?.asString, Error::class.java
             ) else null
-
-        )
+        }
     }
 }

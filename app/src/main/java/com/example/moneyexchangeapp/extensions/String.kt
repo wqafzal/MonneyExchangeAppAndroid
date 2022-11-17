@@ -2,8 +2,11 @@ package com.example.moneyexchangeapp.extensions
 
 import androidx.annotation.RawRes
 import com.example.moneyexchangeapp.AndroidApp
+import com.example.moneyexchangeapp.util.Constants.DateFormats.DATE_FORMAT
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.text.SimpleDateFormat
+import java.util.*
 
 fun String.Companion.readRaw(@RawRes resourceId: Int): String {
 
@@ -18,4 +21,8 @@ fun String.Companion.readRaw(@RawRes resourceId: Int): String {
         line = bufferedReader.readLine()
     }
     return stringBuilder.toString()
+}
+
+fun String.toDate(): Date {
+    return SimpleDateFormat(DATE_FORMAT).parse(this)
 }
