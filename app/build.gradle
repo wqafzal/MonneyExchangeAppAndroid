@@ -31,7 +31,7 @@ android {
             buildConfigField "boolean", "enabledLogging", "false"
             buildConfigField "boolean", "useCachedData", "false"
             buildConfigField "String", "BASE_URL", "\"https://${domainName}/\""
-            buildConfigField "String", "apiKey", "\"TxqVR0ya5bCkvTh1jdC7rzXjcpk512wE\""
+            buildConfigField "String", "apiKey", "\"s9HWvXj0p0jLVIQFm4Vzg6CbH5Z9q2uS\""
             versionCode = project.getVersionCode()
             versionName = getFormattedDate()
         }
@@ -45,7 +45,7 @@ android {
             buildConfigField "boolean", "enabledLogging", "true"
             buildConfigField "boolean", "useCachedData", "false"
             buildConfigField "String", "BASE_URL", "\"https://${domainName}/\""
-            buildConfigField "String", "apiKey", "\"CNJU51zFTjFJSJYw21FJtx3eXeUtcpUF\""
+            buildConfigField "String", "apiKey", "\"s9HWvXj0p0jLVIQFm4Vzg6CbH5Z9q2uS\""
             versionCode = project.getVersionCode()
             versionName = getFormattedDate()
         }
