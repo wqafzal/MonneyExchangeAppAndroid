@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import com.example.moneyexchangeapp.R
 import com.example.moneyexchangeapp.base.BaseFragment
 import com.example.moneyexchangeapp.databinding.FragmentCurrencyCaculateHistoryBinding
 import com.example.moneyexchangeapp.network.Status
@@ -57,6 +58,10 @@ class CurrencyCalculateHistoryFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.historicalList.adapter = exchangeHistoryAdapter
         binding.historicalPopularList.adapter = exchangeHistoryAdapterForCommonCurrencies
+        getHistoricalEdition()
+    }
+
+    private fun getHistoricalEdition() {
         viewModel.getHistoricalData(fromCurrency, toCurrency).observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.LOADING -> {
@@ -65,14 +70,24 @@ class CurrencyCalculateHistoryFragment : BaseFragment() {
                 Status.SUCCESS -> {
                     viewModel.loadingHistoricalDataForSelectedOnes.set(false)
                     exchangeHistoryAdapter.setItems(it.data?.rates)
+                    getHistoricalDataForPastThreeDaysForCommonCurrencies()
                 }
                 Status.ERROR -> {
                     viewModel.loadingHistoricalDataForSelectedOnes.set(false)
-                    it.message?.let { it1 -> showLongSnackBar(it1) }
+                    it.message?.let { it1 ->
+                        showDialog(getString(R.string.error), it1, getString(R.string.retry), {
+                            getHistoricalEdition()
+                        }, onNegative = {
+                            activity?.onBackPressed()
+                        }, cancelable = false)
+                    }
                 }
 
             }
         }
+    }
+
+    private fun getHistoricalDataForPastThreeDaysForCommonCurrencies() {
         viewModel.getHistoricalData(fromCurrency, famousCurrencies).observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.LOADING -> {
@@ -85,7 +100,13 @@ class CurrencyCalculateHistoryFragment : BaseFragment() {
                 }
                 Status.ERROR -> {
                     viewModel.loadingHistoricalDataForCommon.set(false)
-                    it.message?.let { it1 -> showLongSnackBar(it1) }
+                    it.message?.let { it1 ->
+                        showDialog(getString(R.string.error), it1, getString(R.string.retry), {
+                            getHistoricalDataForPastThreeDaysForCommonCurrencies()
+                        }, onNegative = {
+                            activity?.onBackPressed()
+                        }, cancelable = false)
+                    }
                 }
 
             }

@@ -7,6 +7,6 @@ object Constants {
         const val VERSION_N0 = 1
     }
     object DateFormats{
-        const val DATE_FORMAT = "YYYY-MM-dd"
+        const val DATE_FORMAT = "yyyy-MM-dd"
     }
 }

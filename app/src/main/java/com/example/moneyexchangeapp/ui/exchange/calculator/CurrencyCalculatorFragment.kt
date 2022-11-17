@@ -74,14 +74,14 @@ class CurrencyCalculatorFragment : BaseFragment(), CurrencyCalculatorViewModel.E
             }
             Status.LOADING -> {
                 viewModel.setLoading()
-                showLongSnackBar(getString(R.string.loadin_symbols))
+                showLongSnackBar(getString(R.string.initializing))
             }
             Status.ERROR -> {
                 viewModel.hideLoading()
                 it.message?.let { it1 ->
-                    showLongSnackBar(it1.plus(getString(R.string.reloadSymbols))) {
+                    showDialog(getString(R.string.error), it1.plus(getString(R.string.failed_initialization)), getString(R.string.retry), {
                         viewModel.fetchSymbols()
-                    }
+                    }, cancelable = false)
                 }
             }
         }
@@ -96,14 +96,14 @@ class CurrencyCalculatorFragment : BaseFragment(), CurrencyCalculatorViewModel.E
                 }
                 Status.LOADING -> {
                     viewModel.setLoading()
-                    showLongSnackBar(getString(R.string.loading_exchange_rates))
+                    showLongSnackBar(getString(R.string.initializing))
                 }
                 Status.ERROR -> {
                     viewModel.hideLoading()
                     it.message?.let { it1 ->
-                        showLongSnackBar(getString(R.string.reloadSymbols)) {
+                        showDialog(getString(R.string.error), it1.plus(getString(R.string.failed_initialization)), getString(R.string.retry), {
                             viewModel.fetchSymbols()
-                        }
+                        }, cancelable = false)
                     }
                 }
             }

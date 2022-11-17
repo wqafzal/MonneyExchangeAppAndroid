@@ -12,7 +12,7 @@ import com.example.moneyexchangeapp.data.local.room.dao.SymbolsDao
 import com.example.moneyexchangeapp.data.model.FixerSymbolsResponseModel
 import com.example.moneyexchangeapp.data.model.LatestExchangeRateResponseModel
 import com.example.moneyexchangeapp.data.remote.fixerApi.FixerService
-import com.example.moneyexchangeapp.extensions.beforeToday
+import com.example.moneyexchangeapp.extensions.isBeforeToday
 import com.example.moneyexchangeapp.extensions.readRaw
 import com.example.moneyexchangeapp.extensions.toDate
 import com.example.moneyexchangeapp.network.DataResponseResource
@@ -47,9 +47,9 @@ class AppRepository @Inject constructor(
         CoroutineHelper.io {
             kotlin.runCatching {
                 storedCurrencyRatesLiveData.postValue(DataResponseResource.loading())
-                var currencyRates = currencyRateDao.getLatestByCurrencyExchangeRate()
+                var currencyRates = if(BuildConfig.useCachedData) getCachedLatestRates() else currencyRateDao.getLatestByCurrencyExchangeRate()
 
-                if (currencyRates != null && currencyRates.date.toDate().beforeToday().not())
+                if (currencyRates != null && currencyRates.date.toDate().isBeforeToday().not())
                     storedCurrencyRatesLiveData.postValue(DataResponseResource.success(currencyRates))
                 else {
                     currencyRates = getCurrentRates()
@@ -80,7 +80,8 @@ class AppRepository @Inject constructor(
         CoroutineHelper.io {
             kotlin.runCatching {
                 symbolsDataLiveData.postValue(DataResponseResource.loading())
-                var symbols = symbolsDao.getSymbols()
+                var symbols =
+                    if (BuildConfig.useCachedData) getCachedSymbols() else symbolsDao.getSymbols()
                 if (symbols != null)
                     symbolsDataLiveData.postValue(DataResponseResource.success(symbols))
                 else {
@@ -108,9 +109,9 @@ class AppRepository @Inject constructor(
         )
         CoroutineHelper.io {
             kotlin.runCatching {
-                if (BuildConfig.useCachedData)
-                    getCachedHistory()
-                else
+//                if (BuildConfig.useCachedData)
+//                    getCachedHistory()
+//                else
                     fixerService.getHistoricalData(
                         startDate,
                         endDate,

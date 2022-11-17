@@ -28,7 +28,6 @@ class CurrencyCalculatorViewModel @Inject constructor(
 
     init {
         fetchSymbols()
-        getLatestRates()
     }
 
     fun getLatestRates() {

@@ -2,7 +2,7 @@ package com.example.moneyexchangeapp.extensions
 
 import java.util.*
 
-fun Date.beforeToday(): Boolean {
+fun Date.isBeforeToday(): Boolean {
     val toCompare = Calendar.getInstance().let {
         it.time = this
         it
