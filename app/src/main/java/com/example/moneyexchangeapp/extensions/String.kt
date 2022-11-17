@@ -13,7 +13,7 @@ fun String.Companion.readRaw(@RawRes resourceId: Int): String {
     val context = AndroidApp.context()
     val inputStream = context.resources.openRawResource(resourceId)
     val bufferedReader = BufferedReader(InputStreamReader(inputStream))
-    var line: String? = null
+    var line: String?
     val stringBuilder = StringBuilder()
     line = bufferedReader.readLine()
     while (line != null) {

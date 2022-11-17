@@ -17,15 +17,63 @@
         android:layout_height="match_parent"
         tools:context=".ui.exchange.calculator.CurrencyCalculatorFragment">
 
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spSource"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/llFrom"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/x_small"
-            android:onItemSelected="@{(parent,view,position, id)->viewModel.onConvertFromSelect(position)}"
+            android:layout_margin="@dimen/x_small"
+            android:background="@drawable/rounded_box"
+            android:orientation="vertical"
             app:layout_constraintEnd_toStartOf="@+id/btnSwapCurrencies"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lbFrom" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/lbFrom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/x_small"
+                android:layout_marginTop="@dimen/x_small"
+                android:text="@string/from" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spSource"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/x_small"
+                android:onItemSelected="@{(parent,view,position, id)->viewModel.onConvertFromSelect(position)}" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llTo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/x_small"
+            android:background="@drawable/rounded_box"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnSwapCurrencies"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/lbTo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/x_small"
+                android:layout_marginTop="@dimen/x_small"
+                android:text="@string/to" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spTarget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/x_small"
+                android:layout_marginEnd="@dimen/x_medium"
+                android:onItemSelected="@{(parent,view,position, id)->viewModel.onConvertToSelect(position)}" />
+
+        </LinearLayout>
+
 
         <androidx.constraintlayout.widget.Constraints
             android:id="@+id/spinnerGuideLine"
@@ -37,46 +85,18 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <TextView
-            android:id="@+id/lbFrom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/x_small"
-            android:text="@string/from"
-            app:layout_constraintEnd_toEndOf="@+id/spSource"
-            app:layout_constraintStart_toStartOf="@+id/spSource"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/btnSwapCurrencies"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x_small"
             android:onClick="@{()->viewModel.swapCurrencies()}"
+            app:layout_constraintBottom_toBottomOf="@+id/llFrom"
             app:layout_constraintEnd_toEndOf="@id/spinnerGuideLine"
             app:layout_constraintStart_toStartOf="@id/spinnerGuideLine"
-            app:layout_constraintTop_toTopOf="@+id/spSource"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_baseline_swap_horiz_24" />
 
-        <TextView
-            android:id="@+id/lbTo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/x_small"
-            android:text="@string/to"
-            app:layout_constraintEnd_toEndOf="@+id/spTarget"
-            app:layout_constraintStart_toStartOf="@+id/spTarget"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spTarget"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/x_small"
-            android:layout_marginEnd="@dimen/x_medium"
-            android:onItemSelected="@{(parent,view,position, id)->viewModel.onConvertToSelect(position)}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/spinnerGuideLine"
-            app:layout_constraintTop_toBottomOf="@id/lbTo" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/sourceAmount"
@@ -86,7 +106,7 @@
             android:hint="@string/amount_hint"
             app:layout_constraintEnd_toStartOf="@+id/calculatedAMount"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnSwapCurrencies">
+            app:layout_constraintTop_toBottomOf="@+id/llFrom">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -104,7 +124,7 @@
             android:hint="@string/amount_calculated_hint"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/sourceAmount"
-            app:layout_constraintTop_toBottomOf="@+id/btnSwapCurrencies">
+            app:layout_constraintTop_toBottomOf="@+id/llFrom">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
