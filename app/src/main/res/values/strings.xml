@@ -12,4 +12,5 @@
     <string name="btn_details_text">Details</string>
     <string name="last_three_days_historical_title">Last 3 days Historical data.</string>
     <string name="last_days_historical_title">Last 3 days Historical data for other  currencies.</string>
+    <string name="check_internet_message">Please check your connection</string>
 </resources>

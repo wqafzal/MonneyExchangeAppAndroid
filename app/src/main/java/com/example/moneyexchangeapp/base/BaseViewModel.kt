@@ -32,7 +32,7 @@ abstract class BaseViewModel : ViewModel() {
                 message = "Failed to connect to server. Timeout."
             }
             is IOException -> {
-                message = "Failed to access resource."
+                message = "Please check your connection."
             }
 //            is InvalidAuthException -> {
 //                message= "In Valid Session data."

@@ -1,5 +1,6 @@
 package com.example.moneyexchangeapp.di
 
+import android.content.Context
 import com.example.moneyexchangeapp.BuildConfig
 import com.example.moneyexchangeapp.data.HistoricalDataResponseModel
 import com.example.moneyexchangeapp.data.model.FixerSymbolsResponseModel
@@ -8,11 +9,13 @@ import com.example.moneyexchangeapp.data.remote.fixerApi.FixerService
 import com.example.moneyexchangeapp.network.deserializer.CountryDeserializer
 import com.example.moneyexchangeapp.network.deserializer.ExchangeRateResponseModelDeserializer
 import com.example.moneyexchangeapp.network.deserializer.HistoricalDataResponseSerializer
+import com.example.moneyexchangeapp.network.interceptors.NetworkInterceptor
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -26,7 +29,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class DataModule {
 
-    companion object{
+    companion object {
         const val HEADER_API_KEY = "apikey"
     }
 
@@ -49,6 +52,7 @@ class DataModule {
     @Provides
     @Singleton
     fun providesRetrofitInstance(
+        @ApplicationContext context: Context,
         gson: Gson
     ): Retrofit {
         val client = OkHttpClient.Builder()
@@ -58,6 +62,7 @@ class DataModule {
             )
         }
 
+        client.addInterceptor(NetworkInterceptor(context))
 
         if (BuildConfig.enabledLogging) {
 
