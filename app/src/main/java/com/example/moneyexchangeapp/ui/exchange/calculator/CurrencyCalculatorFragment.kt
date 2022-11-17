@@ -68,6 +68,10 @@ class CurrencyCalculatorFragment : BaseFragment(), CurrencyCalculatorViewModel.E
                     targetAdapter.setItems(list)
                     binding.spSource.adapter = sourceAdapter
                     binding.spTarget.adapter = targetAdapter
+                    if (viewModel.convertFromPosition != -1)
+                        binding.spSource.setSelection(viewModel.convertFromPosition)
+                    if (viewModel.convertToPosition != -1)
+                        binding.spTarget.setSelection(viewModel.convertToPosition)
                     removeSymbolsObserver()
                     viewModel.getLatestRates()
                 }

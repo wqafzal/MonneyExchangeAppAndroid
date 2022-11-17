@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import com.example.moneyexchangeapp.R
 import com.example.moneyexchangeapp.base.BaseFragment
 import com.example.moneyexchangeapp.databinding.FragmentCurrencyCaculateHistoryBinding
@@ -58,33 +59,34 @@ class CurrencyCalculateHistoryFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.historicalList.adapter = exchangeHistoryAdapter
         binding.historicalPopularList.adapter = exchangeHistoryAdapterForCommonCurrencies
-        getHistoricalEdition()
+        getHistoricalDataForSelection()
     }
 
-    private fun getHistoricalEdition() {
-        viewModel.getHistoricalData(fromCurrency, toCurrency).observe(viewLifecycleOwner) {
-            when (it.status) {
-                Status.LOADING -> {
-                    viewModel.loadingHistoricalDataForSelectedOnes.set(true)
-                }
-                Status.SUCCESS -> {
-                    viewModel.loadingHistoricalDataForSelectedOnes.set(false)
-                    exchangeHistoryAdapter.setItems(it.data?.rates)
-                    getHistoricalDataForPastThreeDaysForCommonCurrencies()
-                }
-                Status.ERROR -> {
-                    viewModel.loadingHistoricalDataForSelectedOnes.set(false)
-                    it.message?.let { it1 ->
-                        showDialog(getString(R.string.error), it1, getString(R.string.retry), {
-                            getHistoricalEdition()
-                        }, onNegative = {
-                            activity?.onBackPressed()
-                        }, cancelable = false)
+    private fun getHistoricalDataForSelection() {
+        viewModel.getHistoricalData(fromCurrency, fromCurrency.plus(",").plus(toCurrency))
+            .observe(viewLifecycleOwner) {
+                when (it.status) {
+                    Status.LOADING -> {
+                        viewModel.loadingHistoricalDataForSelectedOnes.set(true)
                     }
-                }
+                    Status.SUCCESS -> {
+                        viewModel.loadingHistoricalDataForSelectedOnes.set(false)
+                        exchangeHistoryAdapter.setItems(it.data?.rates)
+                        getHistoricalDataForPastThreeDaysForCommonCurrencies()
+                    }
+                    Status.ERROR -> {
+                        viewModel.loadingHistoricalDataForSelectedOnes.set(false)
+                        it.message?.let { it1 ->
+                            showDialog(getString(R.string.error), it1, getString(R.string.retry), {
+                                getHistoricalDataForSelection()
+                            }, onNegative = {
+                                view?.let { it2 -> Navigation.findNavController(it2).navigateUp() }
+                            }, negativeButtonText = getString(R.string.go_back), cancelable = false)
+                        }
+                    }
 
+                }
             }
-        }
     }
 
     private fun getHistoricalDataForPastThreeDaysForCommonCurrencies() {
@@ -104,8 +106,8 @@ class CurrencyCalculateHistoryFragment : BaseFragment() {
                         showDialog(getString(R.string.error), it1, getString(R.string.retry), {
                             getHistoricalDataForPastThreeDaysForCommonCurrencies()
                         }, onNegative = {
-                            activity?.onBackPressed()
-                        }, cancelable = false)
+                            view?.let { it2 -> Navigation.findNavController(it2).navigateUp() }
+                        }, negativeButtonText = getString(R.string.go_back), cancelable = false)
                     }
                 }
 

@@ -2,9 +2,7 @@ package com.example.moneyexchangeapp.ui.exchange.calculator
 
 import androidx.databinding.ObservableField
 import com.example.moneyexchangeapp.base.BaseViewModel
-import com.example.moneyexchangeapp.data.model.ExchangeRate
 import com.example.moneyexchangeapp.repository.AppRepository
-import com.example.moneyexchangeapp.ui.exchange.history.adapters.ExchangeHistoryAdapter
 import com.example.moneyexchangeapp.util.ConversionUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.math.RoundingMode
@@ -41,10 +39,14 @@ class CurrencyCalculatorViewModel @Inject constructor(
         repository.getStoredSymbols()
     }
 
-    var convertTo = "USD"
-    var convertFrom = "EUR"
+    var convertTo = ""
+    var convertFrom = ""
+
+    var convertToPosition = -1
+    var convertFromPosition = -1
 
     fun onConvertToSelect(position: Int) {
+        convertToPosition = position
         symbolsResponse.value?.data?.symbols?.get(position)?.let {
             convertTo = it.currencySymbol
         }
@@ -52,10 +54,17 @@ class CurrencyCalculatorViewModel @Inject constructor(
     }
 
     private fun convertAmount() {
-        if (amount.isEmpty() || pauseConversion)
+        if (amount.isEmpty() || convertFrom.isEmpty() || convertTo.isEmpty() || pauseConversion)
             return
         latestExchangeRates.value?.data?.rates?.let {
-            updateConversion(ConversionUtils.updateConversionFromLatestRates(it, convertFrom, convertTo, amount.toDouble()))
+            updateConversion(
+                ConversionUtils.updateConversionFromLatestRates(
+                    it,
+                    convertFrom,
+                    convertTo,
+                    amount.toDouble()
+                )
+            )
         }
     }
 
@@ -70,6 +79,7 @@ class CurrencyCalculatorViewModel @Inject constructor(
     }
 
     fun onConvertFromSelect(position: Int) {
+        convertFromPosition = position
         symbolsResponse.value?.data?.symbols?.get(position)?.let {
             convertFrom = it.currencySymbol
         }
