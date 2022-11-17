@@ -2,7 +2,10 @@ package com.example.moneyexchangeapp.ui.exchange.calculator
 
 import androidx.databinding.ObservableField
 import com.example.moneyexchangeapp.base.BaseViewModel
+import com.example.moneyexchangeapp.data.model.ExchangeRate
 import com.example.moneyexchangeapp.repository.AppRepository
+import com.example.moneyexchangeapp.ui.exchange.history.adapters.ExchangeHistoryAdapter
+import com.example.moneyexchangeapp.util.ConversionUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -51,14 +54,8 @@ class CurrencyCalculatorViewModel @Inject constructor(
     private fun convertAmount() {
         if (amount.isEmpty() || pauseConversion)
             return
-        updateConversionFromLatestRates()
-    }
-
-    private fun updateConversionFromLatestRates() {
-        latestExchangeRates.value?.data?.rates?.let { rateList ->
-            val amountInEuros =
-                amount.toDouble().div(rateList.first { it.symbol == convertFrom }.rate)
-            updateConversion(amountInEuros.times(rateList.first { it.symbol == convertTo }.rate))
+        latestExchangeRates.value?.data?.rates?.let {
+            updateConversion(ConversionUtils.updateConversionFromLatestRates(it, convertFrom, convertTo, amount.toDouble()))
         }
     }
 
