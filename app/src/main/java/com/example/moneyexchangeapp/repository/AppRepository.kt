@@ -1,9 +1,12 @@
 package com.example.moneyexchangeapp.repository
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.moneyexchangeapp.BuildConfig
 import com.example.moneyexchangeapp.R
 import com.example.moneyexchangeapp.base.BaseRepository
+import com.example.moneyexchangeapp.data.HistoricalDataResponseModel
 import com.example.moneyexchangeapp.data.local.room.dao.CurrencyRateDao
 import com.example.moneyexchangeapp.data.local.room.dao.SymbolsDao
 import com.example.moneyexchangeapp.data.model.FixerSymbolsResponseModel
@@ -13,9 +16,12 @@ import com.example.moneyexchangeapp.extensions.beforeToday
 import com.example.moneyexchangeapp.extensions.readRaw
 import com.example.moneyexchangeapp.extensions.toDate
 import com.example.moneyexchangeapp.network.DataResponseResource
+import com.example.moneyexchangeapp.util.Constants
 import com.example.moneyexchangeapp.util.CoroutineHelper
 import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 class AppRepository @Inject constructor(
@@ -23,8 +29,7 @@ class AppRepository @Inject constructor(
     private val currencyRateDao: CurrencyRateDao,
     private val symbolsDao: SymbolsDao,
     val gson: Gson,
-    @ApplicationContext
-    val context: Context
+    @ApplicationContext val context: Context
 ) : BaseRepository() {
     private suspend fun getCurrentRates(): LatestExchangeRateResponseModel {
         return fixerService.getLatestRates()
@@ -90,6 +95,52 @@ class AppRepository @Inject constructor(
                 symbolsDataLiveData.postValue(DataResponseResource.error(onHandleError(it)))
             }
         }
+    }
+
+    fun getHistoricalData(
+        fromCurrency: String,
+        toCurrency: String
+    ): LiveData<DataResponseResource<HistoricalDataResponseModel>> {
+        val startDate = getDateFromXDaysAgo(2)
+        val endDate = getDateFromXDaysAgo(0)
+        val response = MutableLiveData<DataResponseResource<HistoricalDataResponseModel>>(
+            DataResponseResource.loading()
+        )
+        CoroutineHelper.io {
+            kotlin.runCatching {
+                if (BuildConfig.useCachedData)
+                    getCachedHistory()
+                else
+                    fixerService.getHistoricalData(
+                        startDate,
+                        endDate,
+                        fromCurrency,
+                        toCurrency,
+                    )
+            }.onSuccess {
+                response.postValue(DataResponseResource.success(it))
+            }.onFailure {
+                response.postValue(DataResponseResource.error(onHandleError(it)))
+            }
+        }
+        return response
+    }
+
+
+    private fun getCachedHistory(): HistoricalDataResponseModel {
+        return gson.fromJson(
+            String.readRaw(R.raw.time_series),
+            HistoricalDataResponseModel::class.java
+        )
+    }
+
+    private fun getDateFromXDaysAgo(daysAgo: Int): String {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DATE, -daysAgo)
+        val simpleDateFormat =
+            SimpleDateFormat(Constants.DateFormats.DATE_FORMAT, Locale.getDefault())
+
+        return simpleDateFormat.format(calendar.time)
     }
 
 
