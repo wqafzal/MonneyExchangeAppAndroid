@@ -34,9 +34,6 @@ class DataResponseResource<T> private constructor(
             return DataResponseResource(LOADING, "loading")
         }
 
-        fun <T> noMoreItem(): DataResponseResource<T> {
-            return DataResponseResource(NO_MORE_ITEM, "no more items exist")
-        }
     }
 
 }

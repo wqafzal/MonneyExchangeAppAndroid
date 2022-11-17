@@ -17,7 +17,7 @@ import org.junit.Test
  */
 class ConversionCheckTest {
 
-    lateinit var gson: Gson
+    private lateinit var gson: Gson
 
     @Before
     fun setGsonConversionFactory() {
