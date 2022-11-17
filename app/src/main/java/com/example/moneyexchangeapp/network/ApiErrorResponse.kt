@@ -5,7 +5,7 @@ import com.google.gson.JsonSyntaxException
 import retrofit2.HttpException
 
 class ApiErrorResponse constructor(error: Throwable) {
-    var message = "An error occurred"
+    private var message = "An error occurred"
 
     init {
         if (error is HttpException) {

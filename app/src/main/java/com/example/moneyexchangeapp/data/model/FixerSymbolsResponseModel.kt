@@ -1,7 +1,5 @@
 package com.example.moneyexchangeapp.data.model
 
-import java.util.*
-
 data class FixerSymbolsResponseModel(
     var success: Boolean,
     val symbols: List<Country>

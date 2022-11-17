@@ -15,15 +15,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class CurrencyCalculateHistoryFragment : BaseFragment() {
 
     companion object {
-        fun newInstance() = CurrencyCalculateHistoryFragment()
         const val FROM_CURRENCY = "fromCurrency"
         const val TO_CURRENCY = "toCurrency"
     }
 
     private lateinit var viewModel: CurrencyExchangeHistoryViewModel
 
-    lateinit var fromCurrency: String
-    lateinit var toCurrency: String
+    private lateinit var fromCurrency: String
+    private lateinit var toCurrency: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,10 +48,10 @@ class CurrencyCalculateHistoryFragment : BaseFragment() {
         }
     }
 
-    var exchangeHistoryAdapter = ExchangeHistoryAdapter()
-    var exchangeHistoryAdapterForCommonCurrencies = ExchangeHistoryAdapter()
+    private var exchangeHistoryAdapter = ExchangeHistoryAdapter()
+    private var exchangeHistoryAdapterForCommonCurrencies = ExchangeHistoryAdapter()
 
-    var famousCurrencies = "USD,PKR,CNY,USD,INR,SAR,RUB,CAD,AUD,CHF"
+    private var famousCurrencies = "USD,PKR,CNY,USD,INR,SAR,RUB,CAD,AUD,CHF"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -69,7 +68,7 @@ class CurrencyCalculateHistoryFragment : BaseFragment() {
                 }
                 Status.ERROR -> {
                     viewModel.loadingHistoricalDataForSelectedOnes.set(false)
-                    it.message?.let { it1 -> showLongSnackbar(it1) }
+                    it.message?.let { it1 -> showLongSnackBar(it1) }
                 }
 
             }
@@ -86,7 +85,7 @@ class CurrencyCalculateHistoryFragment : BaseFragment() {
                 }
                 Status.ERROR -> {
                     viewModel.loadingHistoricalDataForCommon.set(false)
-                    it.message?.let { it1 -> showLongSnackbar(it1) }
+                    it.message?.let { it1 -> showLongSnackBar(it1) }
                 }
 
             }

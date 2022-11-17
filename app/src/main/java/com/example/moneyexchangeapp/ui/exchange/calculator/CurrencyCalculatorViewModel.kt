@@ -40,8 +40,8 @@ class CurrencyCalculatorViewModel @Inject constructor(
 
     var events: ExchangeEvents? = null
 
-    var currentAPiCall: Job? = null
-    var pauseConversion: Boolean = false
+    private var currentAPiCall: Job? = null
+    private var pauseConversion: Boolean = false
 
     init {
         fetchSymbols()
@@ -148,9 +148,10 @@ class CurrencyCalculatorViewModel @Inject constructor(
     }
 
     private fun updateConversionFromLatestRates() {
-        _latestExchangeRates.value?.data?.rates?.let {
-            val amountInEuros = amount.toDouble().div(it.first { it.symbol == convertFrom }.rate)
-            updateConversion(amountInEuros.times(it.first { it.symbol == convertTo }.rate))
+        _latestExchangeRates.value?.data?.rates?.let { rateList ->
+            val amountInEuros =
+                amount.toDouble().div(rateList.first { it.symbol == convertFrom }.rate)
+            updateConversion(amountInEuros.times(rateList.first { it.symbol == convertTo }.rate))
         }
     }
 
@@ -189,7 +190,7 @@ class CurrencyCalculatorViewModel @Inject constructor(
         convertAmount()
     }
 
-    var amount: String = "1"
+    private var amount: String = "1"
 
     interface ExchangeEvents {
         fun onError(message: String)

@@ -30,10 +30,6 @@ class ApiResponseResource<T> private constructor(
             return ApiResponseResource(ERROR, msg)
         }
 
-        fun <T> loading(@Nullable msg: String): ApiResponseResource<T> {
-            return ApiResponseResource(LOADING, msg)
-        }
-
         fun <T> loading(): ApiResponseResource<T> {
             return ApiResponseResource(LOADING, "loading")
         }

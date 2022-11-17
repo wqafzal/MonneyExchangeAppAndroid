@@ -5,7 +5,7 @@ import com.example.moneyexchangeapp.AndroidApp
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-fun String.Companion.readRaw(@RawRes resourceId: Int): String? {
+fun String.Companion.readRaw(@RawRes resourceId: Int): String {
 
     val context = AndroidApp.context()
     val inputStream = context.resources.openRawResource(resourceId)

@@ -18,12 +18,4 @@ abstract class BaseRecyclerAdapter<T, H : RecyclerView.ViewHolder> : RecyclerVie
         notifyDataSetChanged()
     }
 
-    fun addItems(items: List<T>?) {
-        val position = this.items.size
-        if (items != null && items.isNotEmpty()) {
-            this.items.addAll(items)
-            this.notifyItemRangeInserted(position, items.size)
-        }
-
-    }
 }

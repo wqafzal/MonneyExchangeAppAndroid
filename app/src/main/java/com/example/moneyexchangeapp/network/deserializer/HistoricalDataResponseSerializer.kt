@@ -22,8 +22,8 @@ class HistoricalDataResponseSerializer : JsonDeserializer<HistoricalDataResponse
         val list = mutableListOf<HistoricalData>()
         if (json?.asJsonObject?.has("rates") == true) {
             val set = json.asJsonObject?.get("rates")?.asJsonObject
-            set?.keySet()?.forEach {
-                val currency = set.get(it)?.asJsonObject?.let { currencies ->
+            set?.keySet()?.forEach { key->//Date in format YYYY-MM-DD
+                val currency = set.get(key)?.asJsonObject?.let { currencies ->
                     currencies.keySet()?.map {
                         ExchangeRate(
                             it,
@@ -31,12 +31,12 @@ class HistoricalDataResponseSerializer : JsonDeserializer<HistoricalDataResponse
                         )
                     }?.toList()
 
-                }?.let { it1 -> HistoricalData(it, currencies = it1) }
+                }?.let { it1 -> HistoricalData(key, currencies = it1) }
                 currency?.let { it1 -> list.add(it1) }
             }
         }
 
-        val data = HistoricalDataResponseModel(
+        return HistoricalDataResponseModel(
             base,
             endDate,
             list,
@@ -44,8 +44,6 @@ class HistoricalDataResponseSerializer : JsonDeserializer<HistoricalDataResponse
             success,
             timeSeries
         )
-
-        return data
     }
 
 }

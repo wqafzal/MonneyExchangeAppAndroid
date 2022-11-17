@@ -8,7 +8,7 @@ import com.example.moneyexchangeapp.data.model.Country
 import com.example.moneyexchangeapp.databinding.RowCurrencyBinding
 
 class CurrencySymbolsAdapter : BaseAdapter() {
-    var items: ArrayList<Country> = ArrayList()
+    private var items: ArrayList<Country> = ArrayList()
     override fun getCount(): Int {
         return items.size
     }

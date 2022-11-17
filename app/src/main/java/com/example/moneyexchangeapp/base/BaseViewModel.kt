@@ -12,7 +12,7 @@ import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-abstract class BaseViewModel() : ViewModel() {
+abstract class BaseViewModel : ViewModel() {
     /**
      * This Method is called from View Model inca se HTTP code is greater than 299
      * another possible flow of invoking is if any exception occurs in try Running Code Block

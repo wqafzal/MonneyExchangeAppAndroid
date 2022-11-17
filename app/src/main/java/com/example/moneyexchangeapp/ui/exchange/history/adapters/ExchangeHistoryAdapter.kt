@@ -21,11 +21,11 @@ class ExchangeHistoryAdapter :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val _data = items[position]
+        val data = items[position]
         DataBindingUtil.bind<RowHistoryBinding>(holder.itemView)?.apply {
-            this.data = _data
+            this.data = data
             list.adapter = ExchangeRateAdapter().apply {
-                this.setItems(_data.currencies)
+                this.setItems(data.currencies)
             }
         }
     }

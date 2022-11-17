@@ -17,20 +17,19 @@ import dagger.hilt.android.AndroidEntryPoint
 class CurrencyCalculatorFragment : BaseFragment(), CurrencyCalculatorViewModel.ExchangeEvents {
 
     companion object {
-        fun newInstance() = CurrencyCalculatorFragment()
     }
 
     private lateinit var viewModel: CurrencyCalculatorViewModel
 
-    var sourceAdapter = CurrencySymbolsAdapter()
-    var targetAdapter = CurrencySymbolsAdapter()
+    private var sourceAdapter = CurrencySymbolsAdapter()
+    private var targetAdapter = CurrencySymbolsAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this)[CurrencyCalculatorViewModel::class.java]
     }
 
-    lateinit var binding: FragmentCurrencyCalculatorBinding
+    private lateinit var binding: FragmentCurrencyCalculatorBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,19 +52,19 @@ class CurrencyCalculatorFragment : BaseFragment(), CurrencyCalculatorViewModel.E
         viewModel.symbolsResponse.observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> {
-                    it.data?.symbols?.let {
-                        sourceAdapter.setItems(it)
-                        targetAdapter.setItems(it)
+                    it.data?.symbols?.let { list ->
+                        sourceAdapter.setItems(list)
+                        targetAdapter.setItems(list)
                         binding.spSource.adapter = sourceAdapter
                         binding.spTarget.adapter = targetAdapter
                     }
                 }
                 Status.LOADING -> {
-                    showLongSnackbar("Loading Currencies list...")
+                    showLongSnackBar("Loading Currencies list...")
                 }
                 Status.ERROR -> {
                     it.message?.let { it1 ->
-                        showLongSnackbar(it1.plus(getString(R.string.reloadSymbols))) {
+                        showLongSnackBar(it1.plus(getString(R.string.reloadSymbols))) {
                             viewModel.fetchSymbols()
                         }
                     }
@@ -94,7 +93,7 @@ class CurrencyCalculatorFragment : BaseFragment(), CurrencyCalculatorViewModel.E
 
 
     override fun onError(message: String) {
-        showLongSnackbar(message)
+        showLongSnackBar(message)
     }
 
 }

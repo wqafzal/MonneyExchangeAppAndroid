@@ -23,6 +23,10 @@ class CurrencyExchangeHistoryViewModel @Inject constructor(
 ) :
     BaseViewModel() {
 
+    companion object{
+        const val DATE_FORMAT = "YYYY-MM-dd"
+    }
+
     var loadingHistoricalDataForSelectedOnes = ObservableField(false)
     var loadingHistoricalDataForCommon = ObservableField(false)
 
@@ -65,7 +69,7 @@ class CurrencyExchangeHistoryViewModel @Inject constructor(
     private fun getDateFromXDaysAgo(daysAgo: Int): String {
         val calendar = Calendar.getInstance()
         calendar.add(Calendar.DATE, -daysAgo)
-        val simpleDateFormat = SimpleDateFormat("YYYY-MM-dd", Locale.getDefault())
+        val simpleDateFormat = SimpleDateFormat(DATE_FORMAT, Locale.getDefault())
 
         return simpleDateFormat.format(calendar.time)
     }

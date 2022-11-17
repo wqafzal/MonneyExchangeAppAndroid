@@ -10,10 +10,6 @@ class AndroidApp : Application(){
         instance = this
     }
 
-    override fun onCreate() {
-        super.onCreate()
-    }
-
     companion object{
         lateinit var instance: AndroidApp
         fun context() : Context {
