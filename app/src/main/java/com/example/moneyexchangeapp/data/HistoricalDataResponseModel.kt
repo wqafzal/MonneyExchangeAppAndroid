@@ -12,6 +12,6 @@ data class HistoricalDataResponseModel(
 )
 
 data class HistoricalData(
-    var date:String,
-    var currencies:List<ExchangeRate>
+    var date: String,
+    var currencies: List<ExchangeRate>
 )

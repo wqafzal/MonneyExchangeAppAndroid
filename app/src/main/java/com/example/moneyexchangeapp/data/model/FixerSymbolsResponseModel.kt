@@ -1,22 +1,38 @@
 package com.example.moneyexchangeapp.data.model
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
+
+@Entity
 data class FixerSymbolsResponseModel(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    var id: Int? = null,
     var success: Boolean,
     val symbols: List<Country>
 )
 
+@Entity
 data class LatestExchangeRateResponseModel(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    var id: Int? = null,
     val base: String,
+    @Ignore
     val date: String,
     val rates: List<ExchangeRate>,
+    @Ignore
     val success: Boolean,
     val timestamp: Int,
+    @Ignore
     val error: Error?
 )
 
 data class ExchangeRate(
-    val symbol:String,
-    val rate:Double
+    val symbol: String,
+    val rate: Double
 )
 
 data class Country(var name: String, var currencySymbol: String)

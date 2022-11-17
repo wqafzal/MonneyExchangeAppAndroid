@@ -1,8 +1,10 @@
 package com.example.moneyexchangeapp.di
 
 import android.content.Context
+import androidx.room.Room
 import com.example.moneyexchangeapp.BuildConfig
 import com.example.moneyexchangeapp.data.HistoricalDataResponseModel
+import com.example.moneyexchangeapp.data.local.room.db.AppDatabase
 import com.example.moneyexchangeapp.data.model.FixerSymbolsResponseModel
 import com.example.moneyexchangeapp.data.model.LatestExchangeRateResponseModel
 import com.example.moneyexchangeapp.data.remote.fixerApi.FixerService
@@ -10,6 +12,7 @@ import com.example.moneyexchangeapp.network.deserializer.CountryDeserializer
 import com.example.moneyexchangeapp.network.deserializer.ExchangeRateResponseModelDeserializer
 import com.example.moneyexchangeapp.network.deserializer.HistoricalDataResponseSerializer
 import com.example.moneyexchangeapp.network.interceptors.NetworkInterceptor
+import com.example.moneyexchangeapp.util.Constants
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -81,6 +84,24 @@ class DataModule {
             .client(client.build())
             .build()
     }
+
+
+    @Provides
+    @Singleton
+    fun getDatabaseInstance(@ApplicationContext context: Context) =
+        synchronized(context) {
+            Room.databaseBuilder(
+                context,
+                AppDatabase::class.java,
+                Constants.DataBase.DATABASE_NAME
+            ).build()
+        }
+
+
+    @Provides
+    @Singleton
+    fun getConverterSingleDao(appDatabase: AppDatabase) = appDatabase.getCurrencyRateDao()
+
 
     @Singleton
     @Provides
