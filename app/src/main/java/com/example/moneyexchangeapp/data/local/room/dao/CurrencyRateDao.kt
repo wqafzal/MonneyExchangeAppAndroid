@@ -11,7 +11,10 @@ import com.example.moneyexchangeapp.data.model.LatestExchangeRateResponseModel
 interface CurrencyRateDao {
 
     @Query("SELECT * FROM LatestExchangeRateResponseModel order by timestamp DESC limit 1 ")
-    fun getLatestByCurrencyExchangeRate(): LiveData<LatestExchangeRateResponseModel?>
+    fun getLatestByCurrencyExchangeRateObservable(): LiveData<LatestExchangeRateResponseModel?>
+//
+    @Query("SELECT * FROM LatestExchangeRateResponseModel order by timestamp DESC limit 1 ")
+    fun getLatestByCurrencyExchangeRate(): LatestExchangeRateResponseModel
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(latestExchangeRateResponseModel: LatestExchangeRateResponseModel)

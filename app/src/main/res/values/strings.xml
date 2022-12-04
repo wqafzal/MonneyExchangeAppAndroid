@@ -17,4 +17,7 @@
     <string name="error">Error!</string>
     <string name="retry">Retry</string>
     <string name="go_back">Go Back</string>
+    <string name="notification_title">Exchange rate</string>
+    <string name="default_amount">1</string>
+    <string name="notification_subtitle">Loading rates</string>
 </resources>

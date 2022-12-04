@@ -47,7 +47,7 @@ class AndroidApp : Application(), Configuration.Provider {
         }.build()
         val work = PeriodicWorkRequest.Builder(
             SeedDatabaseWorker::class.java,
-            15,
+            30,
             TimeUnit.MINUTES
         ).setConstraints(constraints).build()
         WorkManager

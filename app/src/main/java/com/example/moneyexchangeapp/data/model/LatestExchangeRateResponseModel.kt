@@ -6,13 +6,15 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class LatestExchangeRateResponseModel(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id: Int? = null,
     val base: String,
     val rates: List<ExchangeRate>,
     val timestamp: Int,
-)
+){
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    var id: Int? = null
+}
 
 data class ExchangeRate(
     val symbol: String,

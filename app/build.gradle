@@ -123,6 +123,9 @@ dependencies {
     def hilt_work_version = "1.0.0"
     implementation "androidx.hilt:hilt-work:$hilt_work_version"
     kapt "androidx.hilt:hilt-compiler:$hilt_work_version"
+
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.10.0")
 }
 
 // Allow references to generated code

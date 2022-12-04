@@ -17,6 +17,13 @@
         android:layout_height="match_parent"
         tools:context=".ui.exchange.calculator.CurrencyCalculatorFragment">
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.loading?View.VISIBLE:View.GONE}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <LinearLayout
             android:id="@+id/llFrom"
             android:layout_width="wrap_content"
@@ -70,7 +77,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="numberSigned|numberDecimal"
                 android:onTextChanged="@{(text,start,before,count)->viewModel.onTextChange(text)}"
-                android:text="1" />
+                android:text="@string/default_amount"
+                tools:text="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.recyclerview.widget.RecyclerView

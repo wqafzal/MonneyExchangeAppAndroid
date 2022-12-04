@@ -22,6 +22,6 @@ ext.getVersionCode = { ->
         return 'git rev-list --count HEAD'.execute().text.trim().toInteger()
     }
     catch (ignored) {
-        return -1
+        return 1
     }
 }

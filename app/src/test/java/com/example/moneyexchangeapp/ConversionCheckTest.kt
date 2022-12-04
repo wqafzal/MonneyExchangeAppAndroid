@@ -35,8 +35,8 @@ class ConversionCheckTest {
         val response = gson.fromJson(jsonResponse, LatestExchangeRateResponseModel::class.java)
         val list = response.rates
         val convertedAmount =
-            ConversionUtils.updateConversionFromLatestRates(list, convertFrom, convertTo, amount)
-        assert(convertedAmount == 460.020614)
+            ConversionUtils.updateConversionFromLatestRates(list, convertFrom, amount)
+        assert(convertedAmount.firstOrNull { it.symbol == convertTo }?.convertedAmount == 460.020614)
     }
 
     @Test
@@ -47,8 +47,8 @@ class ConversionCheckTest {
         val response = gson.fromJson(jsonResponse, LatestExchangeRateResponseModel::class.java)
         val list = response.rates
         val convertedAmount =
-            ConversionUtils.updateConversionFromLatestRates(list, convertFrom, convertTo, amount)
-        assert(convertedAmount == 0.004493094302943563)
+            ConversionUtils.updateConversionFromLatestRates(list, convertFrom, amount)
+        assert(convertedAmount.firstOrNull { it.symbol == convertTo }?.convertedAmount == 0.004493094302943563)
     }
 
     private var jsonResponse = """
