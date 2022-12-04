@@ -1,8 +1,6 @@
 package com.example.moneyexchangeapp
 
-import com.example.moneyexchangeapp.data.model.FixerSymbolsResponseModel
 import com.example.moneyexchangeapp.data.model.LatestExchangeRateResponseModel
-import com.example.moneyexchangeapp.network.deserializer.CountryDeserializer
 import com.example.moneyexchangeapp.network.deserializer.ExchangeRateResponseModelDeserializer
 import com.example.moneyexchangeapp.util.ConversionUtils
 import com.google.gson.Gson
@@ -22,7 +20,6 @@ class ConversionCheckTest {
     @Before
     fun setGsonConversionFactory() {
         gson = GsonBuilder()
-            .registerTypeAdapter(FixerSymbolsResponseModel::class.java, CountryDeserializer())
             .registerTypeAdapter(
                 LatestExchangeRateResponseModel::class.java,
                 ExchangeRateResponseModelDeserializer()

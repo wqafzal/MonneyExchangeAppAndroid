@@ -10,23 +10,6 @@
         android:name="com.example.moneyexchangeapp.ui.exchange.calculator.CurrencyCalculatorFragment"
         android:label="@string/converter_screen_title"
         tools:layout="@layout/fragment_currency_calculator">
-        <action
-            android:id="@+id/action_nav_currency_calculator_to_nav_history"
-            app:destination="@id/nav_history" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/nav_history"
-        android:name="com.example.moneyexchangeapp.ui.exchange.history.CurrencyCalculateHistoryFragment"
-        android:label="@string/converter_history_screen_title"
-        tools:layout="@layout/fragment_currency_caculate_history">
-        <argument
-            android:name="fromCurrency"
-            app:argType="string" />
-        <argument
-            android:name="toCurrency"
-            app:argType="string" />
-
     </fragment>
 
 </navigation>

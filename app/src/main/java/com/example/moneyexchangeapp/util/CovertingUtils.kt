@@ -1,18 +1,26 @@
 package com.example.moneyexchangeapp.util
 
 import com.example.moneyexchangeapp.data.model.ExchangeRate
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 object ConversionUtils {
     fun updateConversionFromLatestRates(
         rateList: List<ExchangeRate>,
-        convertFrom: String,
-        convertTo: String,
+        base: String,
         amount: Double
-    ): Double {
+    ): List<ExchangeRate> {
+        val amountInBase =
+            amount.div(rateList.first { it.symbol == base }.rate)
+        return rateList.map {
+            it.convertedAmount = amountInBase.times(it.rate)
+            it
+        }.toList()
+    }
 
-        val amountInEuros =
-            amount.div(rateList.first { it.symbol == convertFrom }.rate)
-        return amountInEuros.times(rateList.first { it.symbol == convertTo }.rate)
-
+    fun formatAmount(amount: Double): String {
+        val decimalFormat = DecimalFormat("#.####")
+        decimalFormat.roundingMode = RoundingMode.FLOOR
+        return decimalFormat.format(amount)
     }
 }

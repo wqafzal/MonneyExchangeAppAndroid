@@ -2,17 +2,18 @@ package com.example.moneyexchangeapp.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.work.OneTimeWorkRequest
+import androidx.work.PeriodicWorkRequest
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import com.example.moneyexchangeapp.BuildConfig
-import com.example.moneyexchangeapp.data.HistoricalDataResponseModel
 import com.example.moneyexchangeapp.data.local.room.db.AppDatabase
-import com.example.moneyexchangeapp.data.model.FixerSymbolsResponseModel
 import com.example.moneyexchangeapp.data.model.LatestExchangeRateResponseModel
-import com.example.moneyexchangeapp.data.remote.fixerApi.FixerService
-import com.example.moneyexchangeapp.network.deserializer.CountryDeserializer
+import com.example.moneyexchangeapp.data.remote.exchangeRateApi.ExchangeRatesService
 import com.example.moneyexchangeapp.network.deserializer.ExchangeRateResponseModelDeserializer
-import com.example.moneyexchangeapp.network.deserializer.HistoricalDataResponseSerializer
 import com.example.moneyexchangeapp.network.interceptors.NetworkInterceptor
 import com.example.moneyexchangeapp.util.Constants
+import com.example.moneyexchangeapp.workers.SeedDatabaseWorker
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -24,6 +25,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.time.Duration
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -32,22 +34,13 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class DataModule {
 
-    companion object {
-        const val HEADER_API_KEY = "apikey"
-    }
-
     @Provides
     @Singleton
     fun providesGsonBuilder(): Gson {
         return GsonBuilder()
-            .registerTypeAdapter(FixerSymbolsResponseModel::class.java, CountryDeserializer())
             .registerTypeAdapter(
                 LatestExchangeRateResponseModel::class.java,
                 ExchangeRateResponseModelDeserializer()
-            )
-            .registerTypeAdapter(
-                HistoricalDataResponseModel::class.java,
-                HistoricalDataResponseSerializer()
             )
             .create()
     }
@@ -59,12 +52,6 @@ class DataModule {
         gson: Gson
     ): Retrofit {
         val client = OkHttpClient.Builder()
-        client.addInterceptor {
-            it.proceed(
-                it.request().newBuilder().addHeader(HEADER_API_KEY, BuildConfig.apiKey).build()
-            )
-        }
-
         client.addInterceptor(NetworkInterceptor(context))
 
         if (BuildConfig.enabledLogging) {
@@ -102,15 +89,11 @@ class DataModule {
     @Singleton
     fun getConverterSingleDao(appDatabase: AppDatabase) = appDatabase.getCurrencyRateDao()
 
-    @Provides
-    @Singleton
-    fun getSymbolsDao(appDatabase: AppDatabase) = appDatabase.getSymbolsDao()
-
 
     @Singleton
     @Provides
-    fun getFixerService(retrofit: Retrofit): FixerService {
-        return retrofit.create(FixerService::class.java)
+    fun getExchangeRatesService(retrofit: Retrofit): ExchangeRatesService {
+        return retrofit.create(ExchangeRatesService::class.java)
     }
 
 }

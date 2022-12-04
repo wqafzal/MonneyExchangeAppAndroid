@@ -26,40 +26,40 @@ android {
         Production {
 
             dimension "backend"
-            def domainName = "api.apilayer.com/fixer"
+            def domainName = "openexchangerates.org/api"
 
             buildConfigField "boolean", "enabledLogging", "false"
             buildConfigField "boolean", "useCachedData", "false"
             buildConfigField "String", "BASE_URL", "\"https://${domainName}/\""
-            buildConfigField "String", "apiKey", "\"s9HWvXj0p0jLVIQFm4Vzg6CbH5Z9q2uS\""
+            buildConfigField "String", "apiKey", "\"128de186a401415d8e39f4b10f173c1d\""
             versionCode = project.getVersionCode()
             versionName = getFormattedDate()
         }
 
         Staging {
             dimension "backend"
-            def domainName = "api.apilayer.com/fixer"
+            def domainName = "openexchangerates.org/api"
 
             applicationIdSuffix ".staging"
 
             buildConfigField "boolean", "enabledLogging", "true"
             buildConfigField "boolean", "useCachedData", "false"
             buildConfigField "String", "BASE_URL", "\"https://${domainName}/\""
-            buildConfigField "String", "apiKey", "\"s9HWvXj0p0jLVIQFm4Vzg6CbH5Z9q2uS\""
+            buildConfigField "String", "apiKey", "\"128de186a401415d8e39f4b10f173c1d\""
             versionCode = project.getVersionCode()
             versionName = getFormattedDate()
         }
 
         Development {
             dimension "backend"
-            def domainName = "api.apilayer.com/fixer"
+            def domainName = "openexchangerates.org/api"
 
             applicationIdSuffix ".dev"
 
             buildConfigField "boolean", "enabledLogging", "true"
             buildConfigField "boolean", "useCachedData", "false"
             buildConfigField "String", "BASE_URL", "\"https://${domainName}/\""
-            buildConfigField "String", "apiKey", "\"s9HWvXj0p0jLVIQFm4Vzg6CbH5Z9q2uS\""
+            buildConfigField "String", "apiKey", "\"128de186a401415d8e39f4b10f173c1d\""
             versionCode = project.getVersionCode()
             versionName = getFormattedDate()
         }
@@ -117,6 +117,12 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+
+    def work_version = "2.7.1"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+    def hilt_work_version = "1.0.0"
+    implementation "androidx.hilt:hilt-work:$hilt_work_version"
+    kapt "androidx.hilt:hilt-compiler:$hilt_work_version"
 }
 
 // Allow references to generated code
