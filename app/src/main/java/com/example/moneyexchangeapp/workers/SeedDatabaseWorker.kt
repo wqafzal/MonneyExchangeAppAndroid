@@ -24,7 +24,7 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.moneyexchangeapp.R
-import com.example.moneyexchangeapp.extensions.vectorToBitmap
+import com.example.moneyexchangeapp.core.extensions.vectorToBitmap
 import com.example.moneyexchangeapp.repository.AppRepository
 import com.example.moneyexchangeapp.ui.MainActivity
 import dagger.assisted.Assisted

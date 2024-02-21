@@ -2,7 +2,7 @@ package com.example.moneyexchangeapp
 
 import com.example.moneyexchangeapp.data.model.LatestExchangeRateResponseModel
 import com.example.moneyexchangeapp.network.deserializer.ExchangeRateResponseModelDeserializer
-import com.example.moneyexchangeapp.util.ConversionUtils
+import com.example.moneyexchangeapp.core.util.ConversionUtils
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import org.junit.Before

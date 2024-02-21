@@ -9,13 +9,13 @@
 
         <variable
             name="viewModel"
-            type="com.example.moneyexchangeapp.ui.exchange.calculator.CurrencyCalculatorViewModel" />
+            type="com.example.moneyexchangeapp.feature.exchange.presentation.calculator.CurrencyCalculatorViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.exchange.calculator.CurrencyCalculatorFragment">
+        tools:context=".feature.exchange.presentation.calculator.CurrencyCalculatorFragment">
 
         <ProgressBar
             android:layout_width="wrap_content"
