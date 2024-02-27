@@ -1,11 +1,12 @@
 package com.example.moneyexchangeapp.feature.exchange.domain
 
-import com.example.moneyexchangeapp.feature.exchange.domain.model.CurrencySymbol
+import com.example.moneyexchangeapp.feature.exchange.domain.model.ExchangeRate
+import kotlinx.coroutines.flow.Flow
 
 interface ExchangeRepository {
-    suspend fun getSymbols(): Result<List<CurrencySymbol>>
+    fun getSymbols(): Flow<List<ExchangeRate>>
 
-    fun getCurrencyRates()
+    suspend fun fetLatestRates(base: String)
 
-    fun getHistoricalData()
+    suspend fun getLatestExchangeRates(base: String, amount: Double): List<ExchangeRate>
 }

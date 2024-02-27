@@ -5,11 +5,11 @@
 
     <data>
 
-        <import type="com.example.moneyexchangeapp.util.ConversionUtils" />
+        <import type="com.example.moneyexchangeapp.core.util.ConversionUtils" />
 
         <variable
             name="data"
-            type="com.example.moneyexchangeapp.data.model.ExchangeRate" />
+            type="com.example.moneyexchangeapp.feature.exchange.domain.model.ExchangeRate" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

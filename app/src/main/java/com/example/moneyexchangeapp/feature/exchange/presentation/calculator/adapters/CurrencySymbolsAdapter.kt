@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import com.example.moneyexchangeapp.data.model.ExchangeRate
 import com.example.moneyexchangeapp.databinding.RowCurrencyBinding
+import com.example.moneyexchangeapp.feature.exchange.domain.model.ExchangeRate
 
 class CurrencySymbolsAdapter : BaseAdapter() {
     private var items: ArrayList<ExchangeRate> = ArrayList()
@@ -33,7 +33,7 @@ class CurrencySymbolsAdapter : BaseAdapter() {
 
     fun setItems(items: List<ExchangeRate>?) {
         this.items.clear()
-        if (items != null && items.isNotEmpty()) {
+        if (!items.isNullOrEmpty()) {
             this.items.addAll(items)
         }
         notifyDataSetChanged()

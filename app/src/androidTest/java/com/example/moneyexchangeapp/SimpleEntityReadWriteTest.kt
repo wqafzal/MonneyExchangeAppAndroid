@@ -5,10 +5,9 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.services.events.TimeStamp
-import com.example.moneyexchangeapp.data.local.room.dao.CurrencyRateDao
-import com.example.moneyexchangeapp.data.local.room.db.AppDatabase
-import com.example.moneyexchangeapp.data.model.ExchangeRate
-import com.example.moneyexchangeapp.data.model.LatestExchangeRateResponseModel
+import com.example.moneyexchangeapp.core.data.AppDatabase
+import com.example.moneyexchangeapp.feature.exchange.data.db.ExchangeRateDao
+import com.example.moneyexchangeapp.feature.exchange.data.db.ExchangeRateEntity
 import org.junit.After
 
 import org.junit.Test
@@ -25,7 +24,7 @@ import java.io.IOException
  */
 @RunWith(AndroidJUnit4::class)
 class SimpleEntityReadWriteTest {
-    private lateinit var ratesDao: CurrencyRateDao
+    private lateinit var ratesDao: ExchangeRateDao
     private lateinit var db: AppDatabase
 
     @Before
@@ -33,7 +32,7 @@ class SimpleEntityReadWriteTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         db = Room.inMemoryDatabaseBuilder(
             context, AppDatabase::class.java).build()
-        ratesDao = db.getCurrencyRateDao()
+        ratesDao = db.getExchangeRateDao()
     }
 
     @After
@@ -42,9 +41,12 @@ class SimpleEntityReadWriteTest {
         db.close()
     }
 
-    private val fakeRate = LatestExchangeRateResponseModel(base = "USD", rates = listOf<ExchangeRate>(
-        ExchangeRate("USD", rate = 1.0)
-    ), timestamp = TimeStamp.now().seconds.toInt())
+    private val fakeRate = ExchangeRateEntity(
+        base = "USD",
+        rate = 1.0,
+        timeStamp = TimeStamp.now().seconds.toInt(),
+        symbol = "USD"
+    )
 
     @Test
     @Throws(Exception::class)

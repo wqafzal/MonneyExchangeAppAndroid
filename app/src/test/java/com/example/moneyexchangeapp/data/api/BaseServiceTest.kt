@@ -2,7 +2,7 @@ package com.example.moneyexchangeapp.data.api
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.moneyexchangeapp.data.model.LatestExchangeRateResponseModel
-import com.example.moneyexchangeapp.network.deserializer.ExchangeRateResponseModelDeserializer
+import com.example.moneyexchangeapp.feature.exchange.data.api.ExchangeRateResponseDeserializer
 import com.google.gson.GsonBuilder
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -63,7 +63,7 @@ abstract class BaseServiceTest<T> {
                 GsonBuilder()
                 .registerTypeAdapter(
                     LatestExchangeRateResponseModel::class.java,
-                    ExchangeRateResponseModelDeserializer()
+                    ExchangeRateResponseDeserializer()
                 )
                 .create()))
             .build()

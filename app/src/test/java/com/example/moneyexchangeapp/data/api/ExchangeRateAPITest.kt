@@ -1,7 +1,7 @@
 package com.example.moneyexchangeapp.data.api
 
 import com.example.moneyexchangeapp.data.model.LatestExchangeRateResponseModel
-import com.example.moneyexchangeapp.data.remote.exchangeRateApi.ExchangeRatesService
+import com.example.moneyexchangeapp.feature.exchange.data.api.ExchangeRatesService
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat

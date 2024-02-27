@@ -1,26 +1,24 @@
-package com.example.moneyexchangeapp.network.deserializer
+package com.example.moneyexchangeapp.feature.exchange.data.api
 
-import com.example.moneyexchangeapp.data.model.ExchangeRate
-import com.example.moneyexchangeapp.data.model.LatestExchangeRateResponseModel
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import java.lang.reflect.Type
 
-class ExchangeRateResponseModelDeserializer : JsonDeserializer<LatestExchangeRateResponseModel> {
+class ExchangeRateResponseDeserializer : JsonDeserializer<LatestExchangeRateResponse> {
     override fun deserialize(
         json: JsonElement?,
         typeOfT: Type?,
         context: JsonDeserializationContext?
-    ): LatestExchangeRateResponseModel {
-        val listOfCountries = mutableListOf<ExchangeRate>()
+    ): LatestExchangeRateResponse {
+        val listOfCountries = mutableListOf<ExchangeRateDto>()
         kotlin.runCatching {
             if (json?.asJsonObject?.has("rates") == true) {
                 val countrySet = json.asJsonObject.get("rates")?.asJsonObject
                 countrySet?.keySet()?.let { keys ->
                     keys.forEach { key ->
                         listOfCountries.add(
-                            ExchangeRate(
+                            ExchangeRateDto(
                                 symbol = key,
                                 rate = countrySet.get(key).asDouble
                             )
@@ -29,7 +27,7 @@ class ExchangeRateResponseModelDeserializer : JsonDeserializer<LatestExchangeRat
                 }
             }
         }
-        return LatestExchangeRateResponseModel(
+        return LatestExchangeRateResponse(
             base = json?.asJsonObject?.get("base")?.asString ?: "",
             rates = listOfCountries,
             timestamp = json?.asJsonObject?.get("timestamp")?.asInt ?: 0

@@ -25,8 +25,8 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.moneyexchangeapp.R
 import com.example.moneyexchangeapp.core.extensions.vectorToBitmap
-import com.example.moneyexchangeapp.repository.AppRepository
-import com.example.moneyexchangeapp.ui.MainActivity
+import com.example.moneyexchangeapp.feature.MainActivity
+import com.example.moneyexchangeapp.feature.exchange.domain.ExchangeRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.Dispatchers
@@ -38,9 +38,8 @@ import kotlin.random.Random
 class SeedDatabaseWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted params: WorkerParameters,
-    private val appRepository: AppRepository
-) :
-    CoroutineWorker(context, params) {
+    private val appRepository: ExchangeRepository
+) : CoroutineWorker(context, params) {
 
     private val notificationManager by lazy {
         applicationContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -50,9 +49,9 @@ class SeedDatabaseWorker @AssistedInject constructor(
         val notificationId = Random(6).nextInt()
         try {
             showNotification(notificationId)
-            val result = appRepository.getStoredCurrencyRatesData()
+            appRepository.fetLatestRates("USD")
             hideNotification(notificationId)
-            return@withContext result
+            return@withContext Result.success()
         } catch (e: Exception) {
             hideNotification(notificationId)
             Result.failure()

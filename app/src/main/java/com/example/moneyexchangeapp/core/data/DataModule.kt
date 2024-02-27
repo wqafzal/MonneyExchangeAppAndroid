@@ -2,20 +2,17 @@ package com.example.moneyexchangeapp.core.data
 
 import android.content.Context
 import androidx.room.Room
-import androidx.work.OneTimeWorkRequest
-import androidx.work.PeriodicWorkRequest
-import androidx.work.WorkManager
-import androidx.work.WorkRequest
 import com.example.moneyexchangeapp.BuildConfig
-import com.example.moneyexchangeapp.data.local.room.db.AppDatabase
-import com.example.moneyexchangeapp.data.model.LatestExchangeRateResponseModel
-import com.example.moneyexchangeapp.data.remote.exchangeRateApi.ExchangeRatesService
-import com.example.moneyexchangeapp.network.deserializer.ExchangeRateResponseModelDeserializer
+import com.example.moneyexchangeapp.feature.exchange.data.api.ExchangeRatesService
+import com.example.moneyexchangeapp.feature.exchange.data.api.ExchangeRateResponseDeserializer
 import com.example.moneyexchangeapp.core.data.network.NetworkInterceptor
 import com.example.moneyexchangeapp.core.util.Constants
-import com.example.moneyexchangeapp.workers.SeedDatabaseWorker
+import com.example.moneyexchangeapp.feature.exchange.data.ExchangeRateRepositoryImpl
+import com.example.moneyexchangeapp.feature.exchange.data.api.LatestExchangeRateResponse
+import com.example.moneyexchangeapp.feature.exchange.domain.ExchangeRepository
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,22 +22,21 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.time.Duration
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 
 @Module
 @InstallIn(SingletonComponent::class)
-class DataModule {
+abstract class DataModule {
 
     @Provides
     @Singleton
     fun providesGsonBuilder(): Gson {
         return GsonBuilder()
             .registerTypeAdapter(
-                LatestExchangeRateResponseModel::class.java,
-                ExchangeRateResponseModelDeserializer()
+                LatestExchangeRateResponse::class.java,
+                ExchangeRateResponseDeserializer()
             )
             .create()
     }
@@ -83,17 +79,13 @@ class DataModule {
                 Constants.DataBase.DATABASE_NAME
             ).build()
         }
-
-
-    @Provides
-    @Singleton
-    fun getConverterSingleDao(appDatabase: AppDatabase) = appDatabase.getCurrencyRateDao()
-
-
-    @Singleton
     @Provides
     fun getExchangeRatesService(retrofit: Retrofit): ExchangeRatesService {
         return retrofit.create(ExchangeRatesService::class.java)
     }
 
+    @Binds
+    abstract fun bindExchangeRateRepository(
+        exchangeRateRepositoryImpl: ExchangeRateRepositoryImpl
+    ): ExchangeRepository
 }

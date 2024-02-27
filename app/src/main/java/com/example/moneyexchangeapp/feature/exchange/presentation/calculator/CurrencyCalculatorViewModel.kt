@@ -1,56 +1,56 @@
 package com.example.moneyexchangeapp.feature.exchange.presentation.calculator
 
-import com.example.moneyexchangeapp.base.BaseViewModel
-import com.example.moneyexchangeapp.data.model.ExchangeRate
-import com.example.moneyexchangeapp.repository.AppRepository
-import com.example.moneyexchangeapp.core.util.ConversionUtils
-import com.example.moneyexchangeapp.util.CoroutineHelper
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.example.moneyexchangeapp.core.base.BaseViewModel
+import com.example.moneyexchangeapp.feature.exchange.domain.ExchangeRepository
+import com.example.moneyexchangeapp.feature.exchange.domain.model.ExchangeRate
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CurrencyCalculatorViewModel @Inject constructor(
-    private val repository: AppRepository
-) :
-    BaseViewModel() {
+    private val repository: ExchangeRepository
+) : BaseViewModel() {
 
-    var latestExchangeRates = repository.exchangeRatesObserver
-    var dataState = repository.dataState
+    private val _usdExchangeRates = MutableLiveData<List<ExchangeRate>>()
+    val usdExchangeRates: LiveData<List<ExchangeRate>> = _usdExchangeRates
 
-    var events: ExchangeEvents? = null
+    private val _conversionResults = MutableLiveData<List<ExchangeRate>>()
+    val conversionResults: LiveData<List<ExchangeRate>> = _usdExchangeRates
 
-    private var amount: String = "1"
-
-    fun getLatestRates() {
-        CoroutineHelper.io {
-            repository.getStoredCurrencyRatesData()
+    init {
+        viewModelScope.launch {
+            repository.getSymbols().collect {
+                _usdExchangeRates.value = it
+            }
         }
     }
 
-    var convertFrom = ""
+    private var amount: String = "1"
+
+    private var convertFrom = ""
 
     var convertFromPosition = -1
 
     private fun convertAmount() {
-        if (amount.isEmpty() || convertFrom.isEmpty())
+        if (amount.isEmpty() || convertFrom.isEmpty()) {
             return
-        latestExchangeRates.value?.rates?.let {
-            CoroutineHelper.io {
-                val list = ConversionUtils.updateConversionFromLatestRates(
-                    it,
-                    convertFrom,
-                    amount.toDouble()
-                )
-                CoroutineHelper.main {
-                    events?.updateList(list)
-                }
-            }
+        }
+        viewModelScope.launch {
+            val rates = repository.getLatestExchangeRates(
+                base = convertFrom,
+                amount = amount.toDouble()
+            )
+            _conversionResults.value = rates
         }
     }
 
     fun onConvertFromSelect(position: Int) {
         convertFromPosition = position
-        latestExchangeRates.value?.rates?.get(position)?.let {
+        usdExchangeRates.value?.get(position)?.let {
             convertFrom = it.symbol
         }
         convertAmount()
@@ -59,11 +59,6 @@ class CurrencyCalculatorViewModel @Inject constructor(
     fun onTextChange(text: CharSequence) {
         amount = text.toString()
         convertAmount()
-    }
-
-
-    interface ExchangeEvents {
-        fun updateList(list: List<ExchangeRate>)
     }
 
 }

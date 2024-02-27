@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.*
-import com.example.moneyexchangeapp.util.CoroutineHelper
+import com.example.moneyexchangeapp.core.util.CoroutineHelper
 import com.example.moneyexchangeapp.workers.SeedDatabaseWorker
 import dagger.hilt.android.HiltAndroidApp
 import java.util.concurrent.TimeUnit

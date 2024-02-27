@@ -6,12 +6,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneyexchangeapp.R
-import com.example.moneyexchangeapp.base.BaseRecyclerAdapter
-import com.example.moneyexchangeapp.data.model.ExchangeRate
+import com.example.moneyexchangeapp.core.base.BaseRecyclerAdapter
 import com.example.moneyexchangeapp.databinding.RowCalculatedResultBinding
+import com.example.moneyexchangeapp.feature.exchange.domain.model.ExchangeRate
 
-class ConvertedAmountListAdapter :
-    BaseRecyclerAdapter<ExchangeRate, ConvertedAmountListAdapter.ViewHolder>() {
+class ConvertedAmountListAdapter : BaseRecyclerAdapter<ExchangeRate, ConvertedAmountListAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
